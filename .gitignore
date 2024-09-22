@@ -23,3 +23,104 @@ frontend/.env.production.local
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
+
+# OSX
+mobile/.DS_Store
+# Xcode
+#
+mobile/ios/app/build
+mobile/ios/build
+mobile/ios/*.pbxuser
+mobile/ios/!default.pbxuser
+mobile/ios/*.mode1v3
+mobile/ios/!default.mode1v3
+mobile/ios/*.mode2v3
+mobile/ios/!default.mode2v3
+mobile/ios/*.perspectivev3
+mobile/ios/!default.perspectivev3
+mobile/ios/xcuserdata
+mobile/ios/*.xccheckout
+mobile/ios/*.moved-aside
+mobile/ios/DerivedData
+mobile/ios/*.hmap
+mobile/ios/*.ipa
+mobile/ios/*.xcuserstate
+mobile/ios/**/.xcode.env.local
+
+# Android/IntelliJ
+#
+mobile/android/app/build
+mobile/android/build
+mobile/android/.idea
+mobile/android/.gradle
+mobile/android/local.properties
+mobile/android/*.iml
+mobile/android/*.hprof
+mobile/android/.cxx/
+mobile/android/*.keystore
+mobile/android/!debug.keystore
+
+# node.js
+#
+mobile/node_modules/
+mobile/npm-debug.log
+mobile/yarn-error.log
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/
+
+mobile/**/fastlane/report.xml
+mobile/**/fastlane/Preview.html
+mobile/**/fastlane/screenshots
+mobile/**/fastlane/test_output
+
+# Bundle artifact
+mobile/*.jsbundle
+
+# Ruby / CocoaPods
+mobile/**/Pods/
+mobile/vendor/bundle/
+
+# Temporary files created by Metro to check the health of the file watcher
+mobile/.metro-health-check*
+
+# testing
+mobile/coverage
+
+# Yarn
+mobile/.yarn/*
+mobile/!.yarn/patches
+mobile/!.yarn/plugins
+mobile/!.yarn/releases
+mobile/!.yarn/sdks
+mobile/!.yarn/versions
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+desktop/node_modules
+desktop/.pnp
+desktop/.pnp.js
+
+# testing
+desktop/coverage
+
+# production
+desktop/build
+
+# misc
+desktop/.DS_Store
+desktop/.env.local
+desktop/.env.development.local
+desktop/.env.test.local
+desktop/.env.production.local
+
+desktop/npm-debug.log*
+desktop/yarn-debug.log*
+desktop/yarn-error.log*
+
+desktop/src-tauri/target
