@@ -1,5 +1,7 @@
 backend/.gradle
 backend/app/build
+backend/app/src/main/resources/application.properties
+backend/app/bin
 
 .vscode
 

@@ -25,6 +25,15 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("javax.validation:validation-api:2.0.1.Final")
     implementation("jakarta.validation:jakarta.validation-api:3.1.0")
+    implementation("org.postgresql:postgresql")
+    implementation("com.auth0:java-jwt:4.4.0")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.postgresql:postgresql")
+    implementation("com.zaxxer:HikariCP")
+    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+    implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.12.6")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     
 
@@ -42,13 +51,14 @@ dependencies {
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(20)
     }
 }
 
 application {
     // Define the main class for the application.
-    mainClass = "org.example.SimpleHttpServerApplication"
+    // mainClass = "org.example.SimpleHttpServerApplication"
+    mainClass = "org.hrtool.SimpleHttpServerApplication"
 }
 
 tasks.named<Test>("test") {
