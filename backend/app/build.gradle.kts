@@ -34,7 +34,12 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.6")
+    implementation("com.microsoft.sqlserver:mssql-jdbc:12.2.0.jre11")
+    implementation ("mysql:mysql-connector-java:8.0.33")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation ("org.springframework.boot:spring-boot-starter-security")
+    implementation ("org.springframework.security:spring-security-config")
+    implementation ("org.springframework.security:spring-security-core")
     
 
     // testImplementation('org.springframework.boot:spring-boot-starter-test')
