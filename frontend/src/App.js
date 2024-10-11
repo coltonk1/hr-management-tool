@@ -7,11 +7,19 @@ import NewExpenseCardForm from "./Forms/NewExpenseCardForm";
 
 function App() {
     return (
-        <div className="App">
-            <header className="App-header">
-                <NewExpenseForm />
-                <NewEmployeeForm />
+        <div>
+            <header>
+                <div className="left-side">
+                    <p>Left Side</p>
+                </div>
+                <div className="right-side">
+                    <p>Right Side</p>
+                </div>
             </header>
+            <Outlet />
+            <footer>
+                <p>Footer</p>
+            </footer>
         </div>
     );
 }
