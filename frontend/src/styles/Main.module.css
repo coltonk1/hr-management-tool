@@ -1,0 +1,184 @@
+.container {
+    text-align: center;
+    padding: 50px;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    font-size: 48px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.message {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.link {
+    font-size: 18px;
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.wrapper {
+    width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    row-gap: 40px;
+}
+
+.coloredContainer {
+    height: 720px;
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+}
+
+.waveContainer {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: block;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.coloredBG {
+    position: absolute;
+    height: calc(100% - 20px);
+    width: 100vw;
+    left: 50%;
+    top: 20px;
+    transform: translate(-50%);
+    background: linear-gradient(
+        to right,
+        #fff0 calc(50% - 800px),
+        #202030 calc(50% - 720px),
+        #0000 calc(50% - 718px),
+        #0000 calc(50% + 718px),
+        #303045 calc(50% + 720px),
+        #fff0 calc(50% + 800px)
+    );
+}
+
+.waveMarginTop {
+    display: block;
+    height: 150px;
+    border: 2px dashed #555;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.smallMargin {
+    display: block;
+    height: 40px;
+    border: 2px dashed #555;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.cardContainer {
+    display: flex;
+    width: fit-content;
+    flex-direction: row;
+    column-gap: 30px;
+    margin: 0 auto;
+    margin-bottom: 50px;
+}
+
+.cardContainer > div {
+    background: rgb(218, 218, 218);
+    height: 350px;
+    width: 270px;
+    border-radius: 25px;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.cardContainer > div:nth-child(2) {
+    margin-top: 30px;
+}
+
+.featureContainer {
+    box-shadow: 0 15px 10px -10px #33333580;
+}
+.solutionContainer {
+    box-shadow: 0 -15px 10px -10px #33333580;
+}
+.solutionContainer .waveContainer {
+    margin-bottom: 0;
+    margin-top: 50px;
+}
+.solutionContainer .coloredBG {
+    top: 70px;
+}
+
+.split {
+    display: flex;
+}
+.split > * {
+    flex: 1;
+    padding: 50px 155px;
+}
+.split > * > title {
+    text-align: left;
+}
+
+.earthContainer {
+    width: 1500px;
+    height: 1000px;
+    display: block;
+    position: absolute;
+    right: -500px;
+    bottom: -500px;
+    z-index: -1;
+    user-select: none;
+}
+
+.moonContainer {
+    width: 1300px;
+    height: 1000px;
+    display: block;
+    position: absolute;
+    left: -300px;
+    top: -400px;
+    z-index: -2;
+    user-select: none;
+}
+
+.earth,
+.moon {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+.coloredContainer.flipped {
+    transform: rotate(180deg);
+    margin-top: 50px;
+}
+
+.inputField {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.inputField > input {
+    background: lightgrey;
+    outline: none;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 1.1em;
+}
+.inputField > input:last-child {
+    height: 250px;
+}
