@@ -1,21 +1,41 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../styles/Main.module.css";
 import earthSrc from "../earth.png";
 import moonSrc from "../moon.png";
 
-const Wave = () => {
+const Wave = ({ reverse = 1 }) => {
+    const [offset, setOffset] = useState(0);
+
+    // const [circles, setCircles] = useState([]);
+
     const numOfCircles = 150;
 
-    const circles = Array.from({ length: numOfCircles }).map(() => {
-        const cx = Math.random() * 100;
-        const cy = Math.random() * 80 + 12;
-        const random = Math.random();
+    const circles = Array.from({ length: numOfCircles }).map((unused, index) => {
+        const cx = (((index * index * 481289) % 10000000) / 10000000) * 100;
+        const cy = (((index * index * 719359) % 10000000) / 10000000) * 120 - 10;
+        const random = ((index * 182751) % 10000000) / 10000000;
         const r = random * 0.2 + 0.1;
         const opacity = random * 0.8 + 0.2;
 
-        return <circle cx={cx} cy={cy} r={r} style={{ opacity }} fill="white" filter={"url(#blur)"}></circle>;
+        return (
+            <circle
+                key={index}
+                cx={cx}
+                cy={cy + offset * r * 3 * reverse}
+                r={r}
+                style={{ opacity }}
+                fill="white"
+                filter={"url(#blur)"}
+            ></circle>
+        );
     });
+
+    useEffect(() => {
+        window.addEventListener("scroll", (e) => {
+            setOffset(window.scrollY / 100);
+        });
+    }, []);
 
     return (
         <svg viewBox="0 8.6 100 100" preserveAspectRatio="none" id="svgArea">
@@ -31,7 +51,7 @@ const Wave = () => {
                     <path d="M0 10Q20 23 36 16T65 14 85 18 100 10V100H0Z" />
                 </clipPath>
                 <filter id="shadow">
-                    <feDropShadow dx="0" dy="-0.5" stdDeviation="0.5" flood-color="#3335" flood-opacity="0.8" />
+                    <feDropShadow dx="0" dy="-0.5" stdDeviation="0.5" floodColor="#3335" floodOpacity="0.8" />
                 </filter>
             </defs>
             <path d="M0 10Q20 23 36 16T65 14 85 18 100 10V80H0Z" fill="url(#gradient1)" filter="url(#shadow)"></path>
@@ -45,7 +65,7 @@ const FullWave = ({ flipped = false }) => {
         <div className={`${styles.coloredContainer} ${flipped ? styles.flipped : ""}`}>
             <div className={styles.coloredBG}></div>
             <div className={styles.waveContainer}>
-                <Wave />
+                <Wave reverse={flipped ? -1 : 1} />
             </div>
         </div>
     );
