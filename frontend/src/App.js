@@ -5,6 +5,8 @@ import NewEmployeeForm from "./Forms/NewEmployeeForm";
 import NewExpenseForm from "./Forms/NewExpenseForm";
 import NewExpenseCardForm from "./Forms/NewExpenseCardForm";
 
+import { Outlet } from "react-router-dom";
+
 function App() {
     return (
         <div>
