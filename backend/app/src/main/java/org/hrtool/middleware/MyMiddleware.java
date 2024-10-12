@@ -23,16 +23,19 @@ public class MyMiddleware extends OncePerRequestFilter {
         String clientIp = request.getRemoteAddr();
         String requestUri = httpRequest.getRequestURI();
         String httpMethod = httpRequest.getMethod();
+        String data = request.toString();
 
         System.out.println("Incoming request from IP: " + clientIp);
         System.out.println("HTTP Method: " + httpMethod);
         System.out.println("Requested URI: " + requestUri);
+        System.out.println("Data: " + request);
+        
 
         // Prints the query strings if any
         if (httpRequest.getQueryString() != null) {
             System.out.println("Query Parameters: " + httpRequest.getQueryString());
         }
-
+        
         // Continue the filter chain, allowing the request to be processed by the next
         // filter or the target resource
         filterChain.doFilter(request, response);

@@ -13,16 +13,22 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.hrtool.repository.ExpenseCardRepository;
+import org.hrtool.repository.ExpenseRepository;
 import org.hrtool.repository.UserRepository;
 import org.hrtool.tables.Users;
 import org.hrtool.models.LoginRequest;
+import org.hrtool.models.NewExpenseCardRequest;
+import org.hrtool.models.NewExpenseRequest;
 import org.hrtool.models.SignupRequest;
-
+import org.hrtool.tables.ExpenseCards;
+import org.hrtool.tables.Expenses;
+import org.apache.catalina.connector.Response;
 import org.hrtool.exceptions.*;
 
 import java.security.SignatureException;
-import java.util.Date;
+import java.util.*;
 
 import javax.crypto.SecretKey;
 import javax.validation.Valid;
@@ -34,7 +40,16 @@ public class ApiController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private ExpenseRepository expenseRepository;
+    @Autowired
+    private ExpenseCardRepository expenseCardRepository;
+   
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public ApiController(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     // Secret key for encoding/hashing
     private static final String SECRET_KEY = "some secret key"; // Should read this from a .env file
@@ -42,18 +57,6 @@ public class ApiController {
     // Token expiration time (1000 * 60 * 60 = 1 hour)
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
-    /**
-     * A simple GET endpoint that returns a "Hello, World!" message.
-     * This can be used to test if the API is up and running by returning
-     * a basic response.
-     *
-     * @return a ResponseEntity with:
-     *         - HTTP 200 OK status and a "Hello, World!" message in the body.
-     */
-    @GetMapping("/hello")
-    public ResponseEntity<String> helloWorld() {
-        return ResponseEntity.ok("Hello, World!");
-    }
 
     /**
      * Handles user signup requests.
@@ -81,19 +84,27 @@ public class ApiController {
     public ResponseEntity<String> signup(@RequestBody @Valid SignupRequest signupRequest) {
         try {
             // Check if the username already exists
+            System.out.println("Username: " + signupRequest.getUsername());
+            System.out.println("Password: " + signupRequest.getPassword());
+            System.out.println("Password: " + signupRequest.getPassword());
+            System.out.println("Hello");
+            System.out.println("ajsdhfj-" + userRepository.findByUsername(signupRequest.getUsername()));
+            
             if (userRepository.findByUsername(signupRequest.getUsername()).isPresent()) {
+                System.out.println("username already exists");
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
             }
 
             // Create new user
-            Users user = new Users(signupRequest.getUsername(),
-                    passwordEncoder.encode(signupRequest.getPassword() + SECRET_KEY));
+            Users user = new Users(signupRequest.getFirstName(),signupRequest.getLastName(),signupRequest.getPhoneNumber(), signupRequest.getSSN(),signupRequest.getPersonalEmail(), signupRequest.getStreetAddress(), signupRequest.getCityAddress(), signupRequest.getStateAddress(), signupRequest.getPostalCodeAddress(), signupRequest.getBirthday(),signupRequest.getUsername(),
+            passwordEncoder.encode(signupRequest.getPassword() + SECRET_KEY),signupRequest.getStatus(), signupRequest.getHiringDate(), signupRequest.getPositionId(), signupRequest.getSalary());
             // ? would also add any other details necessary to the Users table and here
 
             userRepository.save(user); // Save user to the database
 
             return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
         } catch (Exception e) {
+            System.out.println("Error: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
@@ -130,7 +141,7 @@ public class ApiController {
         try {
             Users user = userRepository.findByUsername(loginRequest.getUsername())
                     .orElseThrow(() -> new UserNotFoundException("User not found"));
-
+            System.out.println("login requested");
             if (passwordEncoder.matches(loginRequest.getPassword() + SECRET_KEY, user.getPassword())) {
                 String token = generateToken(user);
                 return ResponseEntity.ok(token);
@@ -141,6 +152,48 @@ public class ApiController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
+    }
+
+
+    /* Handles requests to add a new expense.  Once the request is recieved, its contents are verified and it is then added to the
+     * database.
+     */
+    @PostMapping("/create_new_expense")
+    public ResponseEntity<String> createNewExpense(@RequestBody @Valid NewExpenseRequest newExpenseRequest){
+
+            try{
+            Expenses expense = new Expenses(newExpenseRequest.getName(),newExpenseRequest.getDate(), newExpenseRequest.getCategory(), newExpenseRequest.getAmount(), newExpenseRequest.getDescription(), newExpenseRequest.getEmployeeId(), newExpenseRequest.getExpenseCardId());
+            expenseRepository.save(expense);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Expense successfully added");
+        } catch(Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Expense not added: " + e);
+        }
+
+    }
+
+    /* Retrieves a list of all employees stored in the database.
+     * 
+     */
+    @GetMapping("/get_all_users")
+    public ResponseEntity<List<Users>> getAllUsers(){
+        List<Users> users = userRepository.findAll();
+        System.out.println("Finding all users");
+        return ResponseEntity.ok(users);
+    }
+
+    /* Adds a new expense card to the database.
+     */
+    @PostMapping("/create_new_expense_card")
+    public ResponseEntity<String> createNewExpenseCard(@RequestBody @Valid NewExpenseCardRequest newExpenseCardRequest){
+        try{
+            ExpenseCards card = new ExpenseCards(newExpenseCardRequest.getCardNumber(), newExpenseCardRequest.getExpirationDate(), newExpenseCardRequest.getSecurityCode(), newExpenseCardRequest.getIssuanceDate(), newExpenseCardRequest.getStatus(), newExpenseCardRequest.getSpendingLimit(), newExpenseCardRequest.getEmployeeId());
+
+            expenseCardRepository.save(card);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Expense card successfully added");
+
+        } catch(Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Expense not added: " + e);
         }
     }
 
@@ -186,7 +239,7 @@ public class ApiController {
             SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
             // Parse the token and extract claims
-            return Jwts.parserBuilder()
+            return Jwts.parser()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
@@ -197,6 +250,11 @@ public class ApiController {
             return null;
         }
     }
+
+
+    
+
+
 
     /**
      * Handles validation exceptions that occur when method arguments are not valid.
