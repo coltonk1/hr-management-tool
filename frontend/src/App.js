@@ -4,11 +4,9 @@ import TestButton from "./TestButton";
 import NewEmployeeForm from "./Forms/NewEmployeeForm";
 import NewExpenseForm from "./Forms/NewExpenseForm";
 import NewExpenseCardForm from "./Forms/NewExpenseCardForm";
-import Sidebar from "./components/Sidebar";
 import { Outlet } from "react-router-dom";
 
-import Home from "./components/Home";
-import Bank from "./components/Bank";
+import { Outlet } from "react-router-dom";
 
 function App() {
     return (

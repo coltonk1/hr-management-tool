@@ -1,140 +1,187 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import styles from "../styles/Main.module.css";
-import earthSrc from "../earth.png";
-import moonSrc from "../moon.png";
+import bank_styles from "../styles/Bank.module.css";
 
-const Wave = () => {
-    const numOfCircles = 150;
+import star_src from "../shooting_stars.png";
 
-    const circles = Array.from({ length: numOfCircles }).map(() => {
-        const cx = Math.random() * 100;
-        const cy = Math.random() * 80 + 12;
-        const random = Math.random();
-        const r = random * 0.2 + 0.1;
-        const opacity = random * 0.8 + 0.2;
+const Bank = () => {
+    const [currentBalance, setCurrentBalance] = useState("");
+    const [history, setHistory] = useState();
+    const [timeAvailable, setTimeAvailable] = useState();
+    const { businessid } = useParams();
 
-        return <circle cx={cx} cy={cy} r={r} style={{ opacity }} fill="white" filter={"url(#blur)"}></circle>;
-    });
+    useEffect(() => {
+        fetchCurrentBalance();
+        fetchBalanceHistory();
+        fetchTimeAvailable();
+    }, []);
 
-    return (
-        <svg viewBox="0 8.6 100 100" preserveAspectRatio="none" id="svgArea">
-            <defs>
-                <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style={{ stopColor: "#202030", stopOpacity: 1 }} />
-                    <stop offset="100%" style={{ stopColor: "#303045", stopOpacity: 1 }} />
-                </linearGradient>
-                <filter id="blur">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.1" />
-                </filter>
-                <clipPath id="clipPath1">
-                    <path d="M0 10Q20 23 36 16T65 14 85 18 100 10V100H0Z" />
-                </clipPath>
-                <filter id="shadow">
-                    <feDropShadow dx="0" dy="-0.5" stdDeviation="0.5" flood-color="#3335" flood-opacity="0.8" />
-                </filter>
-            </defs>
-            <path d="M0 10Q20 23 36 16T65 14 85 18 100 10V80H0Z" fill="url(#gradient1)" filter="url(#shadow)"></path>
-            <g clipPath="url(#clipPath1)">{circles}</g>
-        </svg>
-    );
-};
+    const fetchCurrentBalance = async () => {
+        const result = 5000;
+        setCurrentBalance(result.toFixed(2));
+    };
 
-const FullWave = ({ flipped = false }) => {
-    return (
-        <div className={`${styles.coloredContainer} ${flipped ? styles.flipped : ""}`}>
-            <div className={styles.coloredBG}></div>
-            <div className={styles.waveContainer}>
-                <Wave />
-            </div>
-        </div>
-    );
-};
+    const fetchBalanceHistory = async () => {
+        const result = [
+            { date: 1728690272002, available: 5127.5, amount_changed: -127.5, new_balance: 5000 },
+            { date: 1728590272002, available: 4627.5, amount_changed: 500, new_balance: 5127.5 },
+            { date: 1728490272002, available: 5127.5, amount_changed: -500, new_balance: 4627.5 },
+            { date: 1728390272002, available: 4877.5, amount_changed: -250, new_balance: 5127.5 },
+        ];
+        setHistory(result);
+    };
 
-const Home = () => {
+    const fetchTimeAvailable = async () => {
+        const result = [
+            { name: "Paid Time Off", days: 30 },
+            { name: "Maternity/Paternity Leave", days: 90 },
+            { name: "Personal Leave", days: 5 },
+            { name: "Random Leave", days: 0 },
+        ];
+        setTimeAvailable(result);
+    };
+
+    const [playingAnimation, setPlayingAnimation] = useState(false);
+
+    function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    const handleCashOut = async () => {
+        if (playingAnimation) return;
+
+        setPlayingAnimation(true);
+
+        coverScreen();
+
+        const text = document.getElementById("text");
+
+        text.style.opacity = 0;
+        await sleep(2000);
+        text.style.opacity = 1;
+        text.textContent = "Contacting server...";
+        await sleep(2000);
+        text.style.opacity = 0;
+        await sleep(1200);
+        text.textContent = "Transferring money...";
+        text.style.opacity = 1;
+        await sleep(4000);
+        text.style.opacity = 0;
+        await sleep(1200);
+        text.textContent = "Cashed out successfully.";
+        text.style.opacity = 1;
+        await sleep(1500);
+        text.style.opacity = 0;
+        await sleep(500);
+        uncoverScreen();
+    };
+
+    const coverScreen = async () => {
+        const element = document.getElementsByClassName(bank_styles.circleAnimation)[0];
+        element.style.opacity = 1;
+        await sleep(1000);
+        element.classList.add(bank_styles.circleAnimationForwards);
+        await sleep(1500);
+        element.classList.remove(bank_styles.circleAnimationForwards);
+        element.style.width = 0;
+        element.style.height = 0;
+    };
+
+    const uncoverScreen = async () => {
+        const element = document.getElementsByClassName(bank_styles.circleAnimation)[0];
+
+        element.classList.add(bank_styles.circleAnimationBackwards);
+        await sleep(1500);
+        element.classList.remove(bank_styles.circleAnimationBackwards);
+        element.style.width = "150vmax";
+        element.style.height = "150vmax";
+        await sleep(500);
+        element.style.opacity = 0;
+        setPlayingAnimation(false);
+    };
+
     return (
         <div className={styles.wrapper}>
+            <div className={bank_styles.circleAnimation} style={{ pointerEvents: playingAnimation ? "all" : "none" }}>
+                <p id="text" className={bank_styles.text}>
+                    Cashed Out Successfully
+                </p>
+            </div>
             <section>
+                <div className={bank_styles.background_image}>
+                    <img src={star_src}></img>
+                </div>
                 <div className={styles.split}>
-                    <div>
-                        <title style={{ color: "#333" }}>Some big title with important words</title>
-                        <p>Some description with information about the important title stuff</p>
+                    <div className={bank_styles.balanceContainer}>
+                        <p>Current balance</p>
+                        <div className={bank_styles.balance}>${currentBalance}</div>
                         <div className={styles.smallMargin}>Margin</div>
+                        <div className={styles.split}>
+                            <div className={bank_styles.bankInfo}>
+                                <p>Routing Number: Bank Info</p>
+                                <p>Other stuff: Bank Info</p>
+                            </div>
+                            <div>
+                                <Link to="/settings">Edit</Link>
+                            </div>
+                        </div>
+                        <div className={styles.smallMargin}>Margin</div>
+                        <div className={bank_styles.cashOut}>
+                            <a
+                                className="outlined-button-2"
+                                onClick={() => {
+                                    handleCashOut();
+                                }}
+                            >
+                                Cash out
+                            </a>
+                        </div>
+                    </div>
+                    <div className={bank_styles.vacationDays}>
+                        {timeAvailable &&
+                            timeAvailable.map((data, index) => {
+                                return (
+                                    <div key={index}>
+                                        <p style={{ color: data.days === 0 ? "#faa" : "#fff" }}>{data.name}</p>
+                                        <p style={{ color: data.days === 0 ? "#faa" : "#dfdfdf" }}>{data.days} Days</p>
+                                    </div>
+                                );
+                            })}
                         <div className={styles.smallMargin}>Margin</div>
                         <Link to="/more" className="outlined-button">
-                            Link
-                        </Link>
-                    </div>
-                    <div></div>
-                </div>
-                <div className={styles.earthContainer}>
-                    <img className={styles.earth} src={earthSrc}></img>
-                </div>
-            </section>
-            <section className={styles.featureContainer}>
-                <FullWave />
-                <div className={styles.waveMarginTop}>Margin</div>
-                <title>Features</title>
-                <div className={styles.cardContainer}>
-                    <div>Card</div>
-                    <div>Card</div>
-                    <div>Card</div>
-                </div>
-                <Link to="/more" className="outlined-button">
-                    Link
-                </Link>
-                <div className={styles.smallMargin}>Margin</div>
-            </section>
-            <section>
-                <div className={styles.split}>
-                    <div></div>
-                    <div>
-                        <title style={{ color: "#333" }}>Some big title with important words</title>
-                        <p>Some description with information about the important title stuff</p>
-                        <div className={styles.smallMargin}>Margin</div>
-                        <div className={styles.smallMargin}>Margin</div>
-                        <Link to="/more" className="outlined-button">
-                            Link
+                            Request Time Off
                         </Link>
                     </div>
                 </div>
-                <div className={styles.moonContainer}>
-                    <img className={styles.moon} src={moonSrc}></img>
-                </div>
             </section>
-            <section className={styles.solutionContainer}>
-                <FullWave flipped />
+            <section className={bank_styles.historyContainer}>
+                <div className={bank_styles.background}></div>
                 <div className={styles.smallMargin}>Margin</div>
-
-                <title>Solutions</title>
-                <div className={styles.cardContainer}>
-                    <div>Card</div>
-                    <div>Card</div>
-                    <div>Card</div>
-                </div>
-                <Link to="/more" className="outlined-button">
-                    Link
-                </Link>
-                <div className={styles.waveMarginTop}>Margin</div>
-            </section>
-            <section>
-                <div className={styles.split}>
+                <title style={{ color: "#303035" }}>History</title>
+                <div>Filters</div>
+                <div className={styles.smallMargin}>Margin</div>
+                <div className={bank_styles.mainHistory}>
                     <div>
-                        <title style={{ color: "#333" }}>Some big title with important words</title>
-                        <p>Some description with information about the important title stuff</p>
-                        <p>Some description with information about the important title stuff</p>
-                        <p>Some description with information about the important title stuff</p>
+                        <p>Date</p>
+                        <p>Available</p>
+                        <p>Amount Changed</p>
+                        <p>New Balance</p>
                     </div>
-                    <div className={styles.inputField}>
-                        <input></input>
-                        <input></input>
-                        <input></input>
-                    </div>
+                    {history &&
+                        history.map((data, index) => {
+                            return (
+                                <div key={index}>
+                                    <p>{new Intl.DateTimeFormat("en-US").format(new Date(data.date))}</p>
+                                    <p>{data.available.toLocaleString("en-US", { style: "currency", currency: "USD" })}</p>
+                                    <p style={{ color: data.amount_changed < 0 ? "red" : "green" }}>
+                                        {data.amount_changed.toLocaleString("en-US", { style: "currency", currency: "USD" })}
+                                    </p>
+                                    <p>{data.new_balance.toLocaleString("en-US", { style: "currency", currency: "USD" })}</p>
+                                </div>
+                            );
+                        })}
                 </div>
-                <Link to="/more" className="outlined-button">
-                    Link
-                </Link>
-                <div className={styles.smallMargin}>Margin</div>
                 <div className={styles.smallMargin}>Margin</div>
                 <div className={styles.smallMargin}>Margin</div>
             </section>
@@ -142,4 +189,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Bank;

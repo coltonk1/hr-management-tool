@@ -1,0 +1,72 @@
+.canvasContainer {
+    width: fit-content;
+    height: fit-content;
+    border-radius: 15px;
+    overflow: hidden;
+    /* background: linear-gradient(to bottom right, #252530); */
+    margin: 0 auto;
+
+    box-shadow: 5px 5px 10px 5px #80808080;
+}
+
+.canvas {
+    display: block;
+}
+
+.graphContainer {
+    background: #ebebeb;
+    padding: 20px;
+    border-radius: 35px;
+    box-shadow: 5px 5px 10px 5px #80808050, 0 0 10px 0 #80808030;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.graphContainer > div:last-child {
+    display: flex;
+    column-gap: 30px;
+    padding: 30px 0;
+}
+
+.graphContainer > div:last-child > div:first-child > title {
+    color: #e73a3a;
+    text-align: left;
+}
+
+.graphContainer > div:last-child > div:last-child > title {
+    color: #303035;
+    text-align: left;
+}
+
+.mainList {
+    background: linear-gradient(to bottom right, #eee, #ddd);
+    box-sizing: border-box;
+}
+
+.mainList > div {
+    columns: 6;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.mainList > div:nth-child(odd) {
+    background: #fffc;
+}
+
+.mainList > div:first-child {
+    font-weight: bold;
+}
+
+p {
+    margin: 0;
+}
+
+.mainList {
+    display: flex;
+    flex-direction: column;
+}
+
+.mainList > div:first-child > p {
+    font-size: 1.2em;
+    color: #303035;
+}

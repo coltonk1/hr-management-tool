@@ -57,10 +57,32 @@ title {
     outline: none;
 }
 
-.outlined-button:hover {
-    transform: scale(1.1);
+.outlined-button-2 {
+    background: linear-gradient(to bottom right, #90f0, #9000f015);
+    outline: 2px solid #a773ff;
+    margin: 0 auto;
+    width: 200px;
+    text-align: center;
+    color: #303035;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: 0.2s;
+    box-shadow: 0 0 5px 2px #5c5e7b50, inset 0 0 5px 2px #0000;
+    display: block;
+    cursor: pointer;
+}
+
+.outlined-button:hover,
+.outlined-button-2:hover {
+    transform: scale(1.07);
     box-shadow: 0 0 5px 2px #5c5e7b50, inset 0 0 5px 2px #5c5e7b50;
     color: #ebebff;
+}
+
+.outlined-button-2:hover {
+    color: #303035;
 }
 
 section {
@@ -73,4 +95,6 @@ footer {
     box-shadow: 0 0 10px 5px #3335;
     display: flex;
     background: white;
+    z-index: 100;
+    position: relative;
 }
