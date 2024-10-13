@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import DashboardLayout from "./components/DashboardLayout";
 import App from "./App";
 import NotFound from "./components/NotFound";
 import Home from "./components/Home";
@@ -17,10 +17,12 @@ const Index = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<App />}>
-                    <Route index element={<Home />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
-                    <Route path="*" element={<NotFound />} />
+                    <Route path="/dashboard" element={<DashboardLayout />}>
+                        <Route element={<Home />} />
+                        <Route path="/dashboard/login" element={<Login />} />
+                        <Route path="/dashboard/signup" element={<Signup />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Route>
                 </Route>
             </Routes>
         </Router>
