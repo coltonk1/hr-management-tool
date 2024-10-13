@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styles from "../styles/Main.module.css";
 import bank_styles from "../styles/Bank.module.css";
+
+import star_src from "../shooting_stars.png";
 
 const Bank = () => {
     const [currentBalance, setCurrentBalance] = useState("");
     const [history, setHistory] = useState();
     const [timeAvailable, setTimeAvailable] = useState();
+    const { businessid } = useParams();
+
     useEffect(() => {
         fetchCurrentBalance();
         fetchBalanceHistory();
@@ -37,16 +41,84 @@ const Bank = () => {
         ];
         setTimeAvailable(result);
     };
+
+    const [playingAnimation, setPlayingAnimation] = useState(false);
+
+    function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    const handleCashOut = async () => {
+        if (playingAnimation) return;
+
+        setPlayingAnimation(true);
+
+        coverScreen();
+
+        const text = document.getElementById("text");
+
+        text.style.opacity = 0;
+        await sleep(2000);
+        text.style.opacity = 1;
+        text.textContent = "Contacting server...";
+        await sleep(2000);
+        text.style.opacity = 0;
+        await sleep(1200);
+        text.textContent = "Transferring money...";
+        text.style.opacity = 1;
+        await sleep(4000);
+        text.style.opacity = 0;
+        await sleep(1200);
+        text.textContent = "Cashed out successfully.";
+        text.style.opacity = 1;
+        await sleep(1500);
+        text.style.opacity = 0;
+        await sleep(500);
+        uncoverScreen();
+    };
+
+    const coverScreen = async () => {
+        const element = document.getElementsByClassName(bank_styles.circleAnimation)[0];
+        element.style.opacity = 1;
+        await sleep(1000);
+        element.classList.add(bank_styles.circleAnimationForwards);
+        await sleep(1500);
+        element.classList.remove(bank_styles.circleAnimationForwards);
+        element.style.width = 0;
+        element.style.height = 0;
+    };
+
+    const uncoverScreen = async () => {
+        const element = document.getElementsByClassName(bank_styles.circleAnimation)[0];
+
+        element.classList.add(bank_styles.circleAnimationBackwards);
+        await sleep(1500);
+        element.classList.remove(bank_styles.circleAnimationBackwards);
+        element.style.width = "150vmax";
+        element.style.height = "150vmax";
+        await sleep(500);
+        element.style.opacity = 0;
+        setPlayingAnimation(false);
+    };
+
     return (
         <div className={styles.wrapper}>
+            <div className={bank_styles.circleAnimation} style={{ pointerEvents: playingAnimation ? "all" : "none" }}>
+                <p id="text" className={bank_styles.text}>
+                    Cashed Out Successfully
+                </p>
+            </div>
             <section>
+                <div className={bank_styles.background_image}>
+                    <img src={star_src}></img>
+                </div>
                 <div className={styles.split}>
                     <div className={bank_styles.balanceContainer}>
                         <p>Current balance</p>
                         <div className={bank_styles.balance}>${currentBalance}</div>
                         <div className={styles.smallMargin}>Margin</div>
                         <div className={styles.split}>
-                            <div>
+                            <div className={bank_styles.bankInfo}>
                                 <p>Routing Number: Bank Info</p>
                                 <p>Other stuff: Bank Info</p>
                             </div>
@@ -56,7 +128,14 @@ const Bank = () => {
                         </div>
                         <div className={styles.smallMargin}>Margin</div>
                         <div className={bank_styles.cashOut}>
-                            <a className="outlined-button-2">Cash out</a>
+                            <a
+                                className="outlined-button-2"
+                                onClick={() => {
+                                    handleCashOut();
+                                }}
+                            >
+                                Cash out
+                            </a>
                         </div>
                     </div>
                     <div className={bank_styles.vacationDays}>
