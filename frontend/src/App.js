@@ -4,6 +4,7 @@ import TestButton from "./TestButton";
 import NewEmployeeForm from "./Forms/NewEmployeeForm";
 import NewExpenseForm from "./Forms/NewExpenseForm";
 import NewExpenseCardForm from "./Forms/NewExpenseCardForm";
+
 import { Outlet } from "react-router-dom";
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
                     <p>Right Side</p>
                 </div>
             </header>
-            <Outlet />
+            <Outlet></Outlet>
             <footer>
                 <p>Footer</p>
             </footer>
