@@ -9,6 +9,7 @@ const Bank = () => {
     const [currentBalance, setCurrentBalance] = useState("");
     const [history, setHistory] = useState();
     const [timeAvailable, setTimeAvailable] = useState();
+
     const { businessid } = useParams();
 
     useEffect(() => {

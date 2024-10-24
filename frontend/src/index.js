@@ -12,6 +12,8 @@ import Signup from "./components/Signup";
 import Bank from "./components/Bank";
 import Stats from "./components/Statistics";
 import Support from "./components/Support";
+import Events from "./components/Events";
+import Profile from "./components/Profile";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -27,6 +29,8 @@ const Index = () => {
 
                     <Route path="/:businessid/stats" element={<Stats />} />
                     <Route path="/:businessid/bank" element={<Bank />} />
+                    <Route path="/:businessid/events" element={<Events />} />
+                    <Route path="/:businessid/profile/:userid" element={<Profile />} />
 
                     <Route path="*" element={<NotFound />} />
                 </Route>
