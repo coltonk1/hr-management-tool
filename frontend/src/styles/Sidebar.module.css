@@ -1,0 +1,27 @@
+.sidebar {
+    background-color: #a773ff;
+    width: 200px;
+    height: 700px;
+}
+
+.li {
+    padding: 10px;
+    color: black;
+    list-style-type: none;
+    text-decoration: none;
+}
+
+.li:hover {
+    background-color: #855ec8;
+    border-radius: 5px;
+    align-content: center;
+}
+
+.dashboard_container {
+    display: flex;
+}
+
+.dashboard_title {
+    margin-left: 10px;
+    color: white;
+}

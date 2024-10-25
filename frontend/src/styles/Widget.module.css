@@ -1,0 +1,18 @@
+.widgetContainer {
+    width: fit-content;
+    height: fit-content;
+    background-color: rgb(217, 217, 217);
+    border-radius: 5px;
+    margin: 30px;
+    padding: 5px;
+}
+
+.widgetTitle {
+    font-size: 25px;
+    padding: 15px;
+}
+
+.attendanceWidgetListEntry {
+    display: inline;
+    margin: 20px;
+}
