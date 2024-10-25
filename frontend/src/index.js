@@ -17,6 +17,8 @@ import AttendancePage from "./components/dashboard/AttendancePage";
 import SummaryPage from "./components/dashboard/SummaryPage";
 import SettingsPage from "./components/dashboard/SettingsPage";
 import PaymentsPage from "./components/dashboard/PaymentsPage";
+import Events from "./components/Events";
+import Profile from "./components/Profile";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -53,6 +55,8 @@ const Index = () => {
                     </Route>
                     <Route path="/:businessid/stats" element={<Stats />} />
                     <Route path="/:businessid/bank" element={<Bank />} />
+                    <Route path="/:businessid/events" element={<Events />} />
+                    <Route path="/:businessid/profile/:userid" element={<Profile />} />
 
                     <Route path="*" element={<NotFound />} />
                 </Route>

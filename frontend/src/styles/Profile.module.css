@@ -1,0 +1,75 @@
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile_image {
+    width: 75px;
+    height: 75px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.profile_image > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.profile_details {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+}
+
+.profile_details > p:last-child {
+    color: #a0a0a0;
+}
+
+.name {
+    display: flex;
+    gap: 10px;
+}
+
+.name > p:not(:first-child) {
+    color: #8251d7;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.name > p:not(:first-child):hover {
+    color: grey;
+}
+
+.stats {
+    background: #252530;
+    width: fit-content;
+    padding: 20px;
+    border-radius: 20px;
+    color: #eee;
+}
+
+.note {
+    background: linear-gradient(to bottom right, #eee, #cdcdcd);
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.note > p {
+    color: grey;
+    font-size: 0.8em;
+}
+.note > div {
+    color: black;
+    font-size: 1.2em;
+    display: flex;
+    gap: 7px;
+    align-items: center;
+}
+
+.note > div > p {
+    color: #8251d7;
+    font-size: 0.8em;
+    height: fit-content;
+}
