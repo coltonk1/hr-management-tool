@@ -1,4 +1,5 @@
 import AttendanceWidget from "../Widgets/AttendanceWidget";
+import Events from "../Events";
 
 const SummaryPage = () => {
     return (

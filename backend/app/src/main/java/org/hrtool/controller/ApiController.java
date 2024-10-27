@@ -28,10 +28,12 @@ import org.apache.catalina.connector.Response;
 import org.hrtool.exceptions.*;
 
 import java.security.SignatureException;
+import java.time.Instant;
 import java.util.*;
 
 import javax.crypto.SecretKey;
 import javax.validation.Valid;
+import java.sql.Timestamp;
 
 @RestController
 @RequestMapping("/api")
@@ -89,6 +91,12 @@ public class ApiController {
             System.out.println("Password: " + signupRequest.getPassword());
             System.out.println("Hello");
             System.out.println("ajsdhfj-" + userRepository.findByUsername(signupRequest.getUsername()));
+
+            Instant instant = Instant.parse(signupRequest.getBirthday());
+            Timestamp birthdayTimestamp = Timestamp.from(instant);  
+
+            Instant instant2 = Instant.parse(signupRequest.getHiringDate());
+            Timestamp hiringDateTimestamp = Timestamp.from(instant2);  
             
             if (userRepository.findByUsername(signupRequest.getUsername()).isPresent()) {
                 System.out.println("username already exists");
@@ -96,8 +104,8 @@ public class ApiController {
             }
 
             // Create new user
-            Users user = new Users(signupRequest.getFirstName(),signupRequest.getLastName(),signupRequest.getPhoneNumber(), signupRequest.getSSN(),signupRequest.getPersonalEmail(), signupRequest.getStreetAddress(), signupRequest.getCityAddress(), signupRequest.getStateAddress(), signupRequest.getPostalCodeAddress(), signupRequest.getBirthday(),signupRequest.getUsername(),
-            passwordEncoder.encode(signupRequest.getPassword() + SECRET_KEY),signupRequest.getStatus(), signupRequest.getHiringDate(), signupRequest.getPositionId(), signupRequest.getSalary());
+            Users user = new Users(signupRequest.getFirstName(),signupRequest.getLastName(),signupRequest.getPhoneNumber(), signupRequest.getSSN(),signupRequest.getPersonalEmail(), signupRequest.getStreetAddress(), signupRequest.getCityAddress(), signupRequest.getStateAddress(), signupRequest.getPostalCodeAddress(), birthdayTimestamp,signupRequest.getUsername(),
+            passwordEncoder.encode(signupRequest.getPassword() + SECRET_KEY),signupRequest.getStatus(), hiringDateTimestamp, signupRequest.getPositionId(), signupRequest.getSalary());
             // ? would also add any other details necessary to the Users table and here
 
             userRepository.save(user); // Save user to the database

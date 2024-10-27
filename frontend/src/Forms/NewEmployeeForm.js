@@ -37,7 +37,7 @@ const NewEmployeeForm = () => {
         const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, so add 1
         const day = String(today.getDate()).padStart(2, "0");
 
-        return `${year}-${month}-${day}`; // Returns in YYYY-MM-DD format
+        return today; // Returns in YYYY-MM-DD format
     }
 
     const onClick = async (event) => {
@@ -52,7 +52,7 @@ const NewEmployeeForm = () => {
         let state_address = formData.state_address;
         let postal_code_address = formData.postal_code_address;
         let ssn = formData.ssn;
-        let birthday = formData.birthday;
+        let birthday = new Date(formData.birthday);
         let username = formData.username;
         let password = formData.password;
         let status = "pending";
