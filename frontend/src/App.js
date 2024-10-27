@@ -38,6 +38,7 @@ function App() {
                 </div>
             </header>
             <Outlet></Outlet>
+            <NewEmployeeForm />
             <footer>
                 <p>Footer</p>
             </footer>

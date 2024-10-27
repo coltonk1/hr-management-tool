@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "users")
@@ -24,18 +25,18 @@ public class Users {
     private String city_address;
     private String state_address;
     private String postal_code_address;
-    private String birthday;
+    private Timestamp birthday;
     private String username;
     private String password;
     private String status;
-    private String hiring_date;
+    private Timestamp hiring_date;
     private int position_id;
     private double salary;
     
     
     
 
-    public Users(String first_name, String last_name, String phone_number, String ssn, String personal_email, String street_address, String city_address, String state_address, String postal_code_address, String birthday, String username, String password, String status, String hiring_date, int position_id, double salary) {
+    public Users(String first_name, String last_name, String phone_number, String ssn, String personal_email, String street_address, String city_address, String state_address, String postal_code_address, Timestamp birthday, String username, String password, String status, Timestamp hiring_date, int position_id, double salary) {
         setFirstName(first_name);
         setLastName(last_name);
         setPhoneNumber(phone_number);
@@ -99,10 +100,10 @@ public class Users {
         return postal_code_address;
     }
 
-    public void setBirthday(String birthday){
+    public void setBirthday(Timestamp birthday){
         this.birthday = birthday;
     }
-    public String getBirthday(){
+    public Timestamp getBirthday(){
         return birthday;
     }
 
@@ -113,10 +114,10 @@ public class Users {
         return status;
     }
 
-    public void setHiringDate(String hiring_date){
+    public void setHiringDate(Timestamp hiring_date){
         this.hiring_date = hiring_date;
     }
-    public String getHiringDate(){
+    public Timestamp getHiringDate(){
         return hiring_date;
     }
 
