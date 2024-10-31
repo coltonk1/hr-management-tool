@@ -1,0 +1,46 @@
+.iphone-icons {
+    height: 26px;
+    position: relative;
+    width: 367px;
+    top: 23px;
+    left: 44px;
+    display: flex;
+}
+
+.iphone-icons .service {
+    height: 20px;
+    left: 266px;
+    position: absolute;
+    top: 3px;
+    width: 23px;
+}
+
+.iphone-icons .wifi {
+    height: 18px;
+    left: 303px;
+    position: absolute;
+    top: 4px;
+    width: 25px;
+}
+
+.iphone-icons .battery {
+    height: 12px;
+    left: 342px;
+    position: absolute;
+    top: 7px;
+    width: 25px;
+}
+
+.iphone-icons .text-wrapper {
+    color: #000000;
+    font-family: "Poppins", Helvetica;
+    font-size: 20px;
+    font-weight: 700;
+    left: 0;
+    letter-spacing: 0;
+    line-height: 22px;
+    position: absolute;
+    top: 0px;
+    white-space: nowrap;
+    width: 79px;
+}
