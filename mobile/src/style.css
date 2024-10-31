@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Poltawski+Nowy:wght@700&display=swap');
+
+.log-in-screen {
+    width: 440px;
+    height: 956px;
+    position: relative;
+    background: linear-gradient(180deg, #222B8B 20%, #393e7d 41%, #090B25 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 20px;
+}
+
+.log-in-screen .iphone-icons {
+    position: absolute;
+    top: 23; /* Positions it at the very top of the container */
+    left: 44; /* Optional: align it to the left side of the container */
+    width: 367px; /* Full width or adjust as needed */
+    height: 26px;
+    display: flex; /* Center icons if there are multiple */
+    justify-content: center; /* Centers icons horizontally */
+    padding: 10px; /* Optional padding */
+    z-index: 1; /* Optional: ensures it sits above other elements if needed */
+}
+
+.log-in-screen .rocket-path {
+  height: 350px;
+  width: 361px;
+  position: absolute;
+  top: 200px;
+  left: 0px;
+  object-fit: cover;
+}
+
+.log-in-screen .rocket {
+  height: 62px;
+  left: 354px;
+  object-fit: cover;
+  position: absolute;
+  top: 215px;
+  width: 55px;
+  transform: translateY(-35.95px); /* Adjust vertical positioning */
+}
+
+.log-in-screen .stars-main {
+  height: 234.05px;
+  left: -12px;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 464px;
+}
+
+.log-in-screen .stars-left {
+  height: 105px;
+  left: -100px;
+  object-fit: cover;
+  position: absolute;
+  top: 195px;
+  width: 219.35px;
+  transform: rotate(-7deg); 
+}
+
+.log-in-screen .stars-right {
+  height: 60.06px;
+  left: 307.16px;
+  object-fit: cover;
+  position: absolute;
+  top: 229.5px;
+  width: 199.42px;
+  transform: rotate(3.6deg); 
+}
+
+.log-in-screen .username-text-bar {
+    background-color: #222B8B;
+    border: none;
+    border-radius: 100px;
+    color: #fff;
+    font-family: 'Poltawski Nowy', Helvetica, sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    width: 385.48px; /* Set width from Figma */
+    height: 50.74px; /* Set height from Figma */
+    text-align: left; /* Align text to the left */
+    padding: 10px 20px; /* Padding for inner spacing */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    position: absolute; /* Positioning can be absolute or relative based on your layout */
+    left: 27px; /* X position */
+    top: 377px; /* Y position */
+    opacity: .7;
+    outline: none;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.log-in-screen .username-input {
+    background-color: transparent;
+    border: none;
+    border-radius: 100px;
+    outline: none;
+    box-shadow: none;
+    font-family: 'Poltawski Nowy', Helvetica, sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    top: 14px;
+}
+
+.log-in-screen .password-text-bar {
+    background-color: #222B8B;
+    border: none;
+    border-radius: 100px;
+    color: #fff;
+    font-family: 'Poltawski Nowy', Helvetica, sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    width: 385.48px; /* Set width from Figma */
+    height: 50.74px; /* Set height from Figma */
+    text-align: left; /* Align text to the left */
+    padding: 10px 20px; /* Padding for inner spacing */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    position: absolute; /* Positioning can be absolute or relative based on your layout */
+    left: 27px; /* X position */
+    top: 467px; /* Y position */
+    opacity: .7; 
+    outline: none;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.log-in-screen .password-input {
+    background-color: transparent;
+    border: none;
+    border-radius: 100px;
+    outline: none;
+    box-shadow: none;
+    font-family: 'Poltawski Nowy', Helvetica, sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    top: 14px;
+}
+    
+.log-in-screen .text {
+    color: #fff;
+    font-family: 'Poltawski Nowy', Helvetica;
+    font-size: 13px;
+    font-weight: 700;
+    width: 269px; /* Set width from Figma */
+    height: 33px; /* Set height from Figma */
+    left: 85px; /* X position */
+    top: 532px; /* Y position */
+    opacity: 1; /* Full opacity */
+    position: absolute;
+    line-height: 22px;
+    text-align: center;
+}
+
+.log-in-screen .sign-up {
+    color: #fff;
+    font-family: 'Poltawski Nowy', Helvetica;
+    font-size: 13px;
+    font-weight: 700;
+    width: 235px; /* Set width from Figma */
+    height: 51px; /* Set height from Figma */
+    left: 100px; /* X position */
+    top: 705px; /* Y position */
+    opacity: 1; /* Full opacity */
+    position: absolute;
+    line-height: 22px;
+    text-align: center;
+}
+
+.log-in-screen .log-in {
+    display: flex; /* Center the button horizontally */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically if needed */
+    background-color: #222B8B;
+    border: none;
+    border-radius: 0px;
+    color: #fff;
+    font-family: 'Poltawski Nowy', Helvetica, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center; 
+    padding: 10px 20px; /* Padding for inner spacing */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    position: absolute; /* Positioning can be absolute or relative based on your layout */
+    left: 85px; /* X position */
+    top: 632px; /* Y position */
+    opacity: 1; 
+    outline: none;
+    box-shadow: none;
+    box-sizing: border-box;
+}
+
+.log-in-screen .login-button {
+    background-color: #222B8B; /* Background color matching your design */
+    border: none; /* Remove default border */
+    border-radius: 100px; /* Rounded corners */
+    color: #ffffff; /* Text color */
+    font-family: 'Poltawski Nowy', Helvetica; /* Match your font */
+    font-size: 20px; /* Font size */
+    font-weight: 700; /* Font weight */
+    width: 225px; /* Width from Figma */
+    height: 35px; /* Height from Figma */
+    cursor: pointer; /* Change cursor to pointer */
+    padding: 10px; /* Padding for inner spacing */
+    box-sizing: border-box; /* Include padding in width/height */
+    display: flex; /* Center the button horizontally */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically if needed */
+}
+
+.log-in-screen .earth {
+    position: absolute; /* Use absolute positioning */
+    left: -275px; /* X position */
+    top: 125px; /* Y position */
+    width: 910px; /* Width */
+    height: 950px; /* Height */
+    transform: translateY(-6.63px); /* Adjust vertical positioning */
+}
