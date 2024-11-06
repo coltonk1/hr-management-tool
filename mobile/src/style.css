@@ -101,16 +101,13 @@ body {
 
 .input-container input {
     width: 100%;
-
     background: #35438e90;
     font-size: 1.3rem;
     color: #cdcdcd;
     border-radius: 15px;
     font-family: Calibri;
-
     border: none;
     backdrop-filter: brightness(0.2) blur(5px);
-
     padding: 10px 20px;
 }
 
@@ -120,7 +117,6 @@ body {
 
 .signup-button {
     display: block;
-
     background: none;
     border-radius: 100px; /* Rounded corners */
     color: #6b74dd; /* Text color */
@@ -128,10 +124,8 @@ body {
     cursor: pointer; /* Change cursor to pointer */
     border: 2px dashed #6b74dd;
     backdrop-filter: blur(5px) brightness(0.9);
-
     width: 100%;
     padding: 10px 20px;
-
     transition: 0.2s;
 }
 
@@ -141,17 +135,14 @@ body {
 
 .login-button {
     display: block;
-
     background: #424bb3; /* Background color matching your design */
     border: none; /* Remove default border */
     border-radius: 100px; /* Rounded corners */
     color: white; /* Text color */
     font-size: 1.2rem; /* Font size */
     cursor: pointer; /* Change cursor to pointer */
-
     width: 100%;
     padding: 10px 20px;
-
     transition: 0.2s;
     user-select: none;
 }
@@ -164,7 +155,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-
     margin-top: 30px;
     margin-bottom: 0;
 }
@@ -183,10 +173,8 @@ body {
 
 .sign-up-redirect {
     margin-top: 20px;
-
     color: #ddd;
     font-size: 1rem;
-
     text-align: center;
 }
 

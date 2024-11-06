@@ -37,6 +37,32 @@
     font-weight: bolder;
     background: linear-gradient(to bottom right, #e624f4, #7125b3);
     background-clip: text;
+    width: fit-content;
+}
+
+.balanceContainer {
+    width: 90%;
+    border-radius: 25px;
+    overflow: hidden;
+    margin: 0 auto;
+    position: relative;
+    box-shadow: 5px 5px 5px 0 #8885, inset 0 0 5px 3px #fff5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 10px;
+    box-sizing: border-box;
+}
+
+.balanceContainer > canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: -1;
 }
 
 .balanceContainer p {
@@ -56,15 +82,14 @@
     width: fit-content;
 }
 
-.background {
-    width: 100vw;
-    position: absolute;
-    background: linear-gradient(to bottom right, #eee, #ddd);
-    height: 100%;
-    left: 50%;
-    transform: translate(-50%);
-    z-index: -1;
-    box-shadow: 0 0 10px 5px #80808050;
+.historyContainer {
+    background: #ededed;
+    padding: 10px 20px 0 20px;
+    box-sizing: border-box;
+    border-radius: 25px;
+    width: 90%;
+    margin: 0 auto;
+    box-shadow: inset 5px 5px 5px 0 #8885;
 }
 
 .mainHistory {
@@ -72,19 +97,25 @@
     flex-direction: column;
 }
 
+.mainHistory > div:first-child {
+    border-bottom: 2px solid #8885;
+    border-radius: 0;
+}
+
 .mainHistory > div:first-child > p {
     font-size: 1.2em;
     color: #303035;
+}
+
+.mainHistory > div:not(:first-child):hover {
+    /* background: linear-gradient(to bottom, #90f0, #9000f015); */
+    box-shadow: 0 0 5px 3px inset #8882;
 }
 
 .mainHistory > div {
     columns: 4;
     padding: 10px 20px;
     border-radius: 10px;
-}
-
-.mainHistory > div:nth-child(odd) {
-    background: #fffc;
 }
 
 .mainHistory > div:first-child {
