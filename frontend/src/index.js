@@ -25,22 +25,6 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 const Index = () => {
     return (
         <Router>
-            <div>
-                <nav>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/login">Login</Link>
-                    </li>
-                    <li>
-                        <Link to="/signup">Signup</Link>
-                    </li>
-                    <li>
-                        <Link to="/dashboard">Dashboard</Link>
-                    </li>
-                </nav>
-            </div>
             <Routes>
                 <Route path="/" element={<App />}>
                     <Route index element={<Home />} />

@@ -1,12 +1,16 @@
 .sidebar {
-    background-color: #a773ff;
-    width: 200px;
-    height: 700px;
+    background: linear-gradient(to bottom, #fff, #ccc);
+    width: 300px;
+    height: calc(100vh - 70px);
+    z-index: 100;
+    position: relative;
+    border-top: 2px solid #8885;
+    box-shadow: 10px 0 10px -5px #80808080;
 }
 
 .li {
     padding: 10px;
-    color: black;
+    color: #ededed;
     list-style-type: none;
     text-decoration: none;
 }
@@ -24,4 +28,10 @@
 .dashboard_title {
     margin-left: 10px;
     color: white;
+}
+
+.dashboard_content {
+    overflow-y: scroll;
+    height: calc(100vh - 70px);
+    flex: 1;
 }

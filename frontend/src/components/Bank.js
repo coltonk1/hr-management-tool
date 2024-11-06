@@ -5,6 +5,108 @@ import bank_styles from "../styles/Bank.module.css";
 
 import star_src from "../shooting_stars.png";
 
+const BalanceGraph = ({ amounts, color }) => {
+    useEffect(() => {
+        const id = "balance-graph";
+        const canvas = document.getElementById(id);
+
+        if (!canvas) return; // Ensure canvas exists before proceeding
+        const ctx = canvas.getContext("2d");
+
+        // Set canvas dimensions
+        canvas.width = 1000;
+        canvas.height = 300;
+
+        ctx.fillStyle = "#252530";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Calculate max and min values in amounts
+        let max = 0;
+        let min = amounts[0];
+        for (let i = 0; i < amounts.length; i++) {
+            max = Math.max(amounts[i], max);
+            min = Math.min(amounts[i], min);
+        }
+
+        const numRows = amounts.length;
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+
+        const rowSpacing = canvasHeight / (numRows + 1) - 15;
+        const smoothness = 3;
+
+        // Gradient for filling the area under the line
+        let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, `${color}a0`);
+        gradient.addColorStop(1, `${color}00`);
+
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height);
+        ctx.lineTo(0, canvas.height - ((amounts[0] - min) * canvas.height) / (max - min));
+
+        for (let i = 0; i < amounts.length; i++) {
+            let y = canvas.height - ((amounts[i] - min) * canvas.height) / (max - min);
+            let x = (canvasWidth / (amounts.length - 1)) * i;
+
+            if (i > 0) {
+                let cp1x = prevX + (x - prevX) / smoothness;
+                let cp1y = prevY;
+                let cp2x = x - (x - prevX) / smoothness;
+                let cp2y = y;
+
+                ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+            }
+
+            // Save the current point as the previous for the next iteration
+            var prevX = x;
+            var prevY = y;
+        }
+
+        // Close the path and fill with gradient
+        ctx.lineTo(prevX, canvas.height);
+        ctx.closePath();
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        // Redraw the lines and circles on top
+        for (let i = 0; i < amounts.length; i++) {
+            let y = canvas.height - ((amounts[i] - min) * canvas.height) / (max - min);
+            let x = (canvasWidth / (amounts.length - 1)) * i;
+
+            if (i > 0) {
+                ctx.beginPath();
+                ctx.moveTo(prevX, prevY);
+
+                let cp1x = prevX + (x - prevX) / smoothness;
+                let cp1y = prevY;
+                let cp2x = x - (x - prevX) / smoothness;
+                let cp2y = y;
+
+                ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+                ctx.strokeStyle = color;
+                ctx.stroke();
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, canvas.height);
+            ctx.strokeStyle = `${color}40`;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(x, y, 1, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.strokeStyle = color;
+            ctx.stroke();
+
+            prevX = x;
+            prevY = y;
+        }
+    }, []);
+    return <canvas id="balance-graph"></canvas>;
+};
+
 const Bank = () => {
     const [currentBalance, setCurrentBalance] = useState("");
     const [history, setHistory] = useState();
@@ -110,56 +212,34 @@ const Bank = () => {
                 </p>
             </div>
             <section>
-                <div className={bank_styles.background_image}>
-                    <img src={star_src}></img>
-                </div>
-                <div className={styles.split}>
-                    <div className={bank_styles.balanceContainer}>
-                        <p>Current balance</p>
-                        <div className={bank_styles.balance}>${currentBalance}</div>
-                        <div className={styles.smallMargin}>Margin</div>
-                        <div className={styles.split}>
-                            <div className={bank_styles.bankInfo}>
-                                <p>Routing Number: Bank Info</p>
-                                <p>Other stuff: Bank Info</p>
-                            </div>
-                            <div>
-                                <Link to="/settings">Edit</Link>
-                            </div>
+                <div className={bank_styles.balanceContainer}>
+                    <BalanceGraph amounts={[500, 1000, 1500, 1280, 0, 500, 1800, 2000, 1500]} color={"#206035"} />
+                    <div className={bank_styles.balance}>${currentBalance}</div>
+                    <div className={styles.smallMargin}>Margin</div>
+                    <div>
+                        <div className={bank_styles.bankInfo}>
+                            <p>Routing Number: Bank Info</p>
+                            <p>Other stuff: Bank Info</p>
                         </div>
-                        <div className={styles.smallMargin}>Margin</div>
-                        <div className={bank_styles.cashOut}>
-                            <a
-                                className="outlined-button-2"
-                                onClick={() => {
-                                    handleCashOut();
-                                }}
-                            >
-                                Cash out
-                            </a>
+                        <div>
+                            <Link to="/settings">Edit</Link>
                         </div>
                     </div>
-                    <div className={bank_styles.vacationDays}>
-                        {timeAvailable &&
-                            timeAvailable.map((data, index) => {
-                                return (
-                                    <div key={index}>
-                                        <p style={{ color: data.days === 0 ? "#faa" : "#fff" }}>{data.name}</p>
-                                        <p style={{ color: data.days === 0 ? "#faa" : "#dfdfdf" }}>{data.days} Days</p>
-                                    </div>
-                                );
-                            })}
-                        <div className={styles.smallMargin}>Margin</div>
-                        <Link to="/more" className="outlined-button">
-                            Request Time Off
-                        </Link>
+                    <div className={styles.smallMargin}>Margin</div>
+                    <div className={bank_styles.cashOut}>
+                        <a
+                            className="outlined-button-2"
+                            onClick={() => {
+                                handleCashOut();
+                            }}
+                        >
+                            Withdraw
+                        </a>
                     </div>
                 </div>
             </section>
             <section className={bank_styles.historyContainer}>
-                <div className={bank_styles.background}></div>
                 <div className={styles.smallMargin}>Margin</div>
-                <title style={{ color: "#303035" }}>History</title>
                 <div>Filters</div>
                 <div className={styles.smallMargin}>Margin</div>
                 <div className={bank_styles.mainHistory}>

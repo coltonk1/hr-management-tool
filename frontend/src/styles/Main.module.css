@@ -23,7 +23,8 @@
 }
 
 .wrapper {
-    width: 1440px;
+    width: 100%;
+    max-width: 1440px;
     margin: 0 auto;
     display: flex;
     position: relative;
@@ -56,12 +57,12 @@
     transform: translate(-50%);
     background: linear-gradient(
         to right,
-        #fff0 calc(50% - 800px),
-        #202030 calc(50% - 720px),
+        #fff0 calc(50% - 850px),
+        #222232 calc(50% - 720px),
         #0000 calc(50% - 718px),
         #0000 calc(50% + 718px),
-        #303045 calc(50% + 720px),
-        #fff0 calc(50% + 800px)
+        #323245 calc(50% + 720px),
+        #0000 calc(50% + 850px)
     );
 }
 
