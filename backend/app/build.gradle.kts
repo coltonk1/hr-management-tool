@@ -40,6 +40,9 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-security")
     implementation ("org.springframework.security:spring-security-config")
     implementation ("org.springframework.security:spring-security-core")
+    compileOnly ("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    implementation("org.projectlombok:lombok:1.18.30")
     
 
     // testImplementation('org.springframework.boot:spring-boot-starter-test')

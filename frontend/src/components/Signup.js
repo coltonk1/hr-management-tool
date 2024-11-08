@@ -1,10 +1,41 @@
 import styles from "../styles/Main.module.css";
 import login_styles from "../styles/Login.module.css";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 import earthSrc from "../plainEarth.png";
 
 const Login = () => {
+    const [data, setData] = useState({ status: "active" });
+
+    const handeInputChange = (key, value) => {
+        let temp_data = data;
+        temp_data[key] = value;
+        setData(temp_data);
+    };
+
+    const signup = () => {
+        console.log("data: ", data);
+        fetch("http://localhost:8080/api/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok " + response.statusText);
+                }
+                return response.json();
+            })
+            .then((result) => {
+                console.log("Success:", result);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    };
     return (
         <section>
             <div className={styles.smallMargin}>Margin</div>
@@ -15,27 +46,62 @@ const Login = () => {
                 </div>
                 <div>
                     <label className={login_styles.required}>Full Name</label>
-                    <input placeholder="" required></input>
+                    <input
+                        id="full_name_input"
+                        onChange={(e) => {
+                            handeInputChange("full_name", e.target.value);
+                        }}
+                        placeholder=""
+                        required
+                    ></input>
                 </div>
                 <div>
                     <label className={login_styles.required}>Username</label>
-                    <input placeholder="" required></input>
+                    <input
+                        id="username_input"
+                        onChange={(e) => {
+                            handeInputChange("username", e.target.value);
+                        }}
+                        placeholder=""
+                        required
+                    ></input>
                 </div>
                 <div>
                     <label className={login_styles.required}>Email</label>
-                    <input placeholder="" required></input>
+                    <input
+                        id="email_input"
+                        onChange={(e) => {
+                            handeInputChange("email", e.target.value);
+                        }}
+                        placeholder=""
+                        required
+                    ></input>
                 </div>
 
                 <div>
                     <label className={login_styles.required}>Password</label>
+                    <input
+                        id="password_input"
+                        onChange={(e) => {
+                            handeInputChange("password", e.target.value);
+                        }}
+                        placeholder=""
+                        required
+                    ></input>
+                </div>
+                <div>
+                    <label id="confirm_password_input" className={login_styles.required}>
+                        Confirm Password
+                    </label>
                     <input placeholder="" required></input>
                 </div>
                 <div>
-                    <label className={login_styles.required}>Confirm Password</label>
-                    <input placeholder="" required></input>
-                </div>
-                <div>
-                    <a onClick={() => {}} className={login_styles.submitLogin}>
+                    <a
+                        onClick={() => {
+                            signup();
+                        }}
+                        className={login_styles.submitLogin}
+                    >
                         Create Account
                     </a>
                 </div>
