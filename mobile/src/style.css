@@ -1,0 +1,185 @@
+@import url("https://fonts.googleapis.com/css2?family=Poltawski+Nowy:wght@700&display=swap");
+
+.background-image {
+    z-index: -1;
+}
+
+* {
+    font-family: "Poltawski Nowy", Helvetica;
+}
+
+body {
+    background: linear-gradient(180deg, #222b8b 20%, #393e7d 41%, #090b25 100%);
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.log-in-screen {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    justify-content: center;
+
+    flex-direction: column;
+    gap: 40px;
+
+    padding: 50px;
+}
+
+.rocket-path,
+.rocket,
+.stars-main,
+.stars-left,
+.stars-right,
+.earth {
+    position: absolute;
+    object-fit: cover;
+}
+
+.log-in-screen .earth {
+    left: -275px; /* X position */
+    top: 125px; /* Y position */
+    width: 910px; /* Width */
+    height: 950px; /* Height */
+    transform: translateY(-6.63px); /* Adjust vertical positioning */
+}
+
+.log-in-screen .rocket-path {
+    height: 350px;
+    width: 361px;
+    top: 200px;
+    left: 0px;
+}
+
+.log-in-screen .rocket {
+    height: 62px;
+    left: 354px;
+    top: 215px;
+    width: 55px;
+    transform: translateY(-35.95px); /* Adjust vertical positioning */
+}
+
+.log-in-screen .stars-main {
+    height: 234.05px;
+    left: -12px;
+    top: 0;
+    width: 464px;
+}
+
+.log-in-screen .stars-left {
+    height: 105px;
+    left: -100px;
+    top: 195px;
+    width: 219.35px;
+    transform: rotate(-7deg);
+}
+
+.log-in-screen .stars-right {
+    height: 60.06px;
+    left: 307.16px;
+    top: 229.5px;
+    width: 199.42px;
+    transform: rotate(3.6deg);
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-container > div {
+    background: none;
+}
+
+.input-container input {
+    width: 100%;
+    background: #35438e90;
+    font-size: 1.3rem;
+    color: #cdcdcd;
+    border-radius: 15px;
+    font-family: Calibri;
+    border: none;
+    backdrop-filter: brightness(0.2) blur(5px);
+    padding: 10px 20px;
+}
+
+.input-container input::placeholder {
+    color: #fff5;
+}
+
+.signup-button {
+    display: block;
+    background: none;
+    border-radius: 100px; /* Rounded corners */
+    color: #6b74dd; /* Text color */
+    font-size: 1.2rem; /* Font size */
+    cursor: pointer; /* Change cursor to pointer */
+    border: 2px dashed #6b74dd;
+    backdrop-filter: blur(5px) brightness(0.9);
+    width: 100%;
+    padding: 10px 20px;
+    transition: 0.2s;
+}
+
+.signup-button:active {
+    color: white;
+}
+
+.login-button {
+    display: block;
+    background: #424bb3; /* Background color matching your design */
+    border: none; /* Remove default border */
+    border-radius: 100px; /* Rounded corners */
+    color: white; /* Text color */
+    font-size: 1.2rem; /* Font size */
+    cursor: pointer; /* Change cursor to pointer */
+    width: 100%;
+    padding: 10px 20px;
+    transition: 0.2s;
+    user-select: none;
+}
+
+.login-button:active {
+    background: #6670e0;
+}
+
+.other-login-methods {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 0;
+}
+
+.other-login-methods .face-id {
+    filter: invert(1);
+    object-fit: contain;
+    width: 50px;
+    height: 50px;
+}
+
+.face-id > img {
+    height: 100%;
+    width: 100%;
+}
+
+.sign-up-redirect {
+    margin-top: 20px;
+    color: #ddd;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.submit-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

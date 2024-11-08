@@ -25,22 +25,6 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 const Index = () => {
     return (
         <Router>
-            <div>
-                <nav>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/login">Login</Link>
-                    </li>
-                    <li>
-                        <Link to="/signup">Signup</Link>
-                    </li>
-                    <li>
-                        <Link to="/dashboard">Dashboard</Link>
-                    </li>
-                </nav>
-            </div>
             <Routes>
                 <Route path="/" element={<App />}>
                     <Route index element={<Home />} />
@@ -48,11 +32,13 @@ const Index = () => {
                     <Route path="login" element={<Login />} />
                     <Route path="signup" element={<Signup />} />
                     <Route path="support" element={<Support />} />
-                    <Route path="dashboard" element={<Dashboard />}>
-                        <Route path="summary" element={<SummaryPage />} />
-                        <Route path="attendance" element={<AttendancePage />} />
-                        <Route path="payments" element={<PaymentsPage />} />
-                        <Route path="settings" element={<SettingsPage />} />
+                    <Route element={<Dashboard />}>
+                        <Route path="dashboard" element={<SummaryPage />} />
+                        <Route path="dashboard">
+                            <Route path="attendance" element={<AttendancePage />} />
+                            <Route path="payments" element={<PaymentsPage />} />
+                            <Route path="settings" element={<SettingsPage />} />
+                        </Route>
                     </Route>
                     <Route path="/:businessid/stats" element={<Stats />} />
                     <Route path="/:businessid/bank" element={<Bank />} />

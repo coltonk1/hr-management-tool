@@ -49,54 +49,56 @@ const Graph = ({ amounts, id, color = "#ff0000", title = "", background = true }
 
         const rowSpacing = canvasHeight / (numRows + 1) - 15;
 
-        ctx.fillStyle = "#252530";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if (background) {
+            ctx.fillStyle = "#252530";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.font = "1em Inter, Calibri";
-        ctx.fillStyle = "white";
-        ctx.textAlign = "right";
-
-        for (let i = 0; i < numRows; i++) {
-            const yPosition = rowSpacing * (i + 1) + 30;
-
-            ctx.strokeStyle = "#484848";
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(75, yPosition);
-            ctx.lineTo(canvasWidth - 50, yPosition);
-            ctx.stroke();
-
-            ctx.fillText(labels[i], 70, yPosition + 5);
-        }
-
-        ctx.font = "45px bold Inter, Calibri";
-        ctx.fillStyle = "white";
-        ctx.textAlign = "center";
-
-        ctx.fillText(title, canvasWidth / 2, 45);
-
-        for (let i = 0; i < amounts.length; i++) {
-            const date = new Date(currentDay - 86400000 * 7 * (amounts.length - (i + 1)));
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
-
-            const date2 = new Date(currentDay - 86400000 * 7 * (amounts.length - (i + 0)) + 86400000);
-            const month2 = date2.getMonth() + 1;
-            const day2 = date2.getDate();
-
-            const xPosition = ((canvasWidth - 125) / (amounts.length - 1)) * i + 75 + 10;
-
-            ctx.strokeStyle = "#484848";
-            ctx.lineWidth = 2;
-
-            ctx.save();
-            ctx.translate(xPosition, canvasHeight - 80);
-            ctx.rotate((-60 / 360) * 2 * Math.PI);
-            ctx.font = ".8em Inter, Calibri";
-            ctx.fillStyle = "#eee";
+            ctx.font = "1em Inter, Calibri";
+            ctx.fillStyle = "white";
             ctx.textAlign = "right";
-            ctx.fillText(`${month2}/${day2}-${month}/${day}`, 0, 0);
-            ctx.restore();
+
+            for (let i = 0; i < numRows; i++) {
+                const yPosition = rowSpacing * (i + 1) + 30;
+
+                ctx.strokeStyle = "#484848";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(75, yPosition);
+                ctx.lineTo(canvasWidth - 50, yPosition);
+                ctx.stroke();
+
+                ctx.fillText(labels[i], 70, yPosition + 5);
+            }
+
+            ctx.font = "45px bold Inter, Calibri";
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+
+            ctx.fillText(title, canvasWidth / 2, 45);
+
+            for (let i = 0; i < amounts.length; i++) {
+                const date = new Date(currentDay - 86400000 * 7 * (amounts.length - (i + 1)));
+                const month = date.getMonth() + 1;
+                const day = date.getDate();
+
+                const date2 = new Date(currentDay - 86400000 * 7 * (amounts.length - (i + 0)) + 86400000);
+                const month2 = date2.getMonth() + 1;
+                const day2 = date2.getDate();
+
+                const xPosition = ((canvasWidth - 125) / (amounts.length - 1)) * i + 75 + 10;
+
+                ctx.strokeStyle = "#484848";
+                ctx.lineWidth = 2;
+
+                ctx.save();
+                ctx.translate(xPosition, canvasHeight - 80);
+                ctx.rotate((-60 / 360) * 2 * Math.PI);
+                ctx.font = ".8em Inter, Calibri";
+                ctx.fillStyle = "#eee";
+                ctx.textAlign = "right";
+                ctx.fillText(`${month2}/${day2}-${month}/${day}`, 0, 0);
+                ctx.restore();
+            }
         }
 
         let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
@@ -184,7 +186,7 @@ const Graph = ({ amounts, id, color = "#ff0000", title = "", background = true }
         };
     }, []);
 
-    return <canvas id={id} className={stats_style.canvas}></canvas>;
+    return <canvas id={id} className={stats_style.canvas} style={!background ? { background: "transparent" } : {}}></canvas>;
 };
 
 export default Graph;
