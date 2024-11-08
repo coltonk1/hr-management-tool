@@ -45,7 +45,7 @@ public class ApiController {
     private ExpenseRepository expenseRepository;
     @Autowired
     private ExpenseCardRepository expenseCardRepository;
-   
+
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -58,7 +58,6 @@ public class ApiController {
 
     // Token expiration time (1000 * 60 * 60 = 1 hour)
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
-
 
     /**
      * Handles user signup requests.
@@ -92,21 +91,29 @@ public class ApiController {
             System.out.println("Hello");
             System.out.println("ajsdhfj-" + userRepository.findByUsername(signupRequest.getUsername()));
 
-            Instant instant = Instant.parse(signupRequest.getBirthday());
-            Timestamp birthdayTimestamp = Timestamp.from(instant);  
-
-            Instant instant2 = Instant.parse(signupRequest.getHiringDate());
-            Timestamp hiringDateTimestamp = Timestamp.from(instant2);  
-            
             if (userRepository.findByUsername(signupRequest.getUsername()).isPresent()) {
                 System.out.println("username already exists");
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
             }
+            // example of finding a user and udpating it
+            // Optional<Users> found_user = userRepository.findByUsername("username");
+            // if(found_user.isPresent()) {
+            // Users updatedUser = found_user.get();
+            // updatedUser.setPhoneNumber("0123456789");
+            // userRepository.save(updatedUser)
+            // }
+            // Why does this update the user instead of saving a new one? dont ask me idk
+            // but I'm guessing its because its getting the user data, containing the id
+            // (primary key), and saving with the same id. If attempting to save a different
+            // id and same username, it should (hopefully) throw an error
 
             // Create new user
-            Users user = new Users(signupRequest.getFirstName(),signupRequest.getLastName(),signupRequest.getPhoneNumber(), signupRequest.getSSN(),signupRequest.getPersonalEmail(), signupRequest.getStreetAddress(), signupRequest.getCityAddress(), signupRequest.getStateAddress(), signupRequest.getPostalCodeAddress(), birthdayTimestamp,signupRequest.getUsername(),
-            passwordEncoder.encode(signupRequest.getPassword() + SECRET_KEY),signupRequest.getStatus(), hiringDateTimestamp, signupRequest.getPositionId(), signupRequest.getSalary());
-            // ? would also add any other details necessary to the Users table and here
+            Users user = Users.builder()
+                    .username(signupRequest.getUsername())
+                    .password(passwordEncoder.encode(signupRequest.getPassword() + SECRET_KEY))
+                    .email(signupRequest.getEmail())
+                    .status(signupRequest.getStatus())
+                    .build();
 
             userRepository.save(user); // Save user to the database
 
@@ -163,44 +170,53 @@ public class ApiController {
         }
     }
 
-
-    /* Handles requests to add a new expense.  Once the request is recieved, its contents are verified and it is then added to the
+    /*
+     * Handles requests to add a new expense. Once the request is recieved, its
+     * contents are verified and it is then added to the
      * database.
      */
     @PostMapping("/create_new_expense")
-    public ResponseEntity<String> createNewExpense(@RequestBody @Valid NewExpenseRequest newExpenseRequest){
+    public ResponseEntity<String> createNewExpense(@RequestBody @Valid NewExpenseRequest newExpenseRequest) {
 
-            try{
-            Expenses expense = new Expenses(newExpenseRequest.getName(),newExpenseRequest.getDate(), newExpenseRequest.getCategory(), newExpenseRequest.getAmount(), newExpenseRequest.getDescription(), newExpenseRequest.getEmployeeId(), newExpenseRequest.getExpenseCardId());
+        try {
+            Expenses expense = new Expenses(newExpenseRequest.getName(), newExpenseRequest.getDate(),
+                    newExpenseRequest.getCategory(), newExpenseRequest.getAmount(), newExpenseRequest.getDescription(),
+                    newExpenseRequest.getEmployeeId(), newExpenseRequest.getExpenseCardId());
             expenseRepository.save(expense);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Expense successfully added");
-        } catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Expense not added: " + e);
         }
 
     }
 
-    /* Retrieves a list of all employees stored in the database.
+    /*
+     * Retrieves a list of all employees stored in the database.
      * 
      */
     @GetMapping("/get_all_users")
-    public ResponseEntity<List<Users>> getAllUsers(){
+    public ResponseEntity<List<Users>> getAllUsers() {
         List<Users> users = userRepository.findAll();
         System.out.println("Finding all users");
         return ResponseEntity.ok(users);
     }
 
-    /* Adds a new expense card to the database.
+    /*
+     * Adds a new expense card to the database.
      */
     @PostMapping("/create_new_expense_card")
-    public ResponseEntity<String> createNewExpenseCard(@RequestBody @Valid NewExpenseCardRequest newExpenseCardRequest){
-        try{
-            ExpenseCards card = new ExpenseCards(newExpenseCardRequest.getCardNumber(), newExpenseCardRequest.getExpirationDate(), newExpenseCardRequest.getSecurityCode(), newExpenseCardRequest.getIssuanceDate(), newExpenseCardRequest.getStatus(), newExpenseCardRequest.getSpendingLimit(), newExpenseCardRequest.getEmployeeId());
+    public ResponseEntity<String> createNewExpenseCard(
+            @RequestBody @Valid NewExpenseCardRequest newExpenseCardRequest) {
+        try {
+            ExpenseCards card = new ExpenseCards(newExpenseCardRequest.getCardNumber(),
+                    newExpenseCardRequest.getExpirationDate(), newExpenseCardRequest.getSecurityCode(),
+                    newExpenseCardRequest.getIssuanceDate(), newExpenseCardRequest.getStatus(),
+                    newExpenseCardRequest.getSpendingLimit(), newExpenseCardRequest.getEmployeeId());
 
             expenseCardRepository.save(card);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Expense card successfully added");
 
-        } catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Expense not added: " + e);
         }
     }
@@ -258,11 +274,6 @@ public class ApiController {
             return null;
         }
     }
-
-
-    
-
-
 
     /**
      * Handles validation exceptions that occur when method arguments are not valid.
