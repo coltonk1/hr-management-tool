@@ -23,7 +23,7 @@ const Wave = ({ reverse = 1 }) => {
             <circle
                 key={index}
                 cx={cx}
-                cy={cy + offset * r * 3 * reverse}
+                cy={cy + offset * r * r * 12.5 * reverse}
                 r={r}
                 style={{ opacity }}
                 fill="white"

@@ -9,7 +9,9 @@ const Dashboard = () => {
     return (
         <div className={styles.dashboard_container}>
             <Sidebar />
-            <Outlet />
+            <div className={styles.dashboard_content}>
+                <Outlet />
+            </div>
         </div>
     );
 };

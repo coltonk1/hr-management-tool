@@ -9,7 +9,12 @@ import summary_icon from "../../resources/summary_icon.svg";
 const Sidebar = () => {
     return (
         <div className={styles.sidebar}>
-            <h1 className={styles.dashboard_title}>Dashboard</h1>
+            <div>
+                <div>
+                    <img></img>
+                    <p>Business Name</p>
+                </div>
+            </div>
             <nav id="nav">
                 <li className={styles.li}>
                     <img className={styles.icon} src={summary_icon}></img>
