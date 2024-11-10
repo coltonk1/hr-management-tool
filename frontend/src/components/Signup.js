@@ -23,14 +23,15 @@ const Login = () => {
             },
             body: JSON.stringify(data),
         })
-            .then((response) => {
+            .then(async (response) => {
                 if (!response.ok) {
-                    throw new Error("Network response was not ok " + response.statusText);
+                    throw new Error("Network response was not ok " + (await response.text()));
                 }
-                return response.json();
+                return response.text();
             })
             .then((result) => {
                 console.log("Success:", result);
+                window.location.href = "/login";
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -49,7 +50,7 @@ const Login = () => {
                     <input
                         id="full_name_input"
                         onChange={(e) => {
-                            handeInputChange("full_name", e.target.value);
+                            handeInputChange("fullName", e.target.value);
                         }}
                         placeholder=""
                         required
