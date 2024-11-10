@@ -13,7 +13,7 @@ public class SignupRequest {
     private String username;
     @NotBlank(message = "Password is required and must not be blank")
     private String password;
-    @NotBlank(message = "First name is required and must not be blank")
+    @NotBlank(message = "Full name is required and must not be blank")
     private String fullName;
     @NotBlank(message = "Personal email is required")
     private String email;

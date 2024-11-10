@@ -54,7 +54,8 @@ public class ApiController {
     }
 
     // Secret key for encoding/hashing
-    private static final String SECRET_KEY = "some secret key"; // Should read this from a .env file
+    private static final String SECRET_KEY = "akwhdc1n982@4nc1u2%oadwmawcdaw_^ioa8nx&9de1298c"; // Should read this from
+                                                                                                // a .env file
 
     // Token expiration time (1000 * 60 * 60 = 1 hour)
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
@@ -109,9 +110,10 @@ public class ApiController {
 
             // Create new user
             Users user = Users.builder()
-                    .username(signupRequest.getUsername())
+                    .username(signupRequest.getUsername().toLowerCase())
                     .password(passwordEncoder.encode(signupRequest.getPassword() + SECRET_KEY))
-                    .email(signupRequest.getEmail())
+                    .email(signupRequest.getEmail().toLowerCase())
+                    .fullName(signupRequest.getFullName())
                     .status(signupRequest.getStatus())
                     .build();
 
@@ -157,7 +159,7 @@ public class ApiController {
             Users user = userRepository.findByUsername(loginRequest.getUsername())
                     .orElseThrow(() -> new UserNotFoundException("User not found"));
             System.out.println("login requested");
-            if (passwordEncoder.matches(loginRequest.getPassword() + SECRET_KEY, user.getPassword())) {
+            if (passwordEncoder.matches((CharSequence) (loginRequest.getPassword() + SECRET_KEY), user.getPassword())) {
                 String token = generateToken(user);
                 return ResponseEntity.ok(token);
             } else {
@@ -166,7 +168,8 @@ public class ApiController {
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred:" + e.getMessage());
         }
     }
 
