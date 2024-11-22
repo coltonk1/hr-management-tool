@@ -4,6 +4,10 @@
     gap: 15px;
 }
 
+.top_section {
+    margin-top: 50px;
+}
+
 .profile_image {
     width: 75px;
     height: 75px;
@@ -27,6 +31,18 @@
     color: #a0a0a0;
 }
 
+.description {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 5px 7px 10px 0 #8885;
+    opacity: 0.8;
+    line-height: 1.3em;
+    font-size: 1.05em;
+}
+
 .name {
     display: flex;
     gap: 10px;
@@ -48,6 +64,8 @@
     padding: 20px;
     border-radius: 20px;
     color: #eee;
+
+    margin: 0 auto;
 }
 
 .note {
@@ -72,4 +90,47 @@
     color: #8251d7;
     font-size: 0.8em;
     height: fit-content;
+}
+
+.element {
+    margin: 10px;
+    padding: 15px;
+    box-sizing: border-box;
+    box-shadow: 5px 5px 10px 0 #8885, inset 5px 5px 10px 0 #8882;
+    background: #aaa1;
+    border-radius: 15px;
+    width: 48%;
+    position: relative;
+}
+
+.element > h1 {
+    position: relative;
+    width: fit-content;
+}
+
+.element > h1 > p {
+    position: absolute;
+    left: calc(100% + 10px);
+    width: 200px;
+    font-size: 0.8em;
+    color: #513bab;
+    font-weight: 400;
+    top: 5px;
+}
+
+.element > div {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 5px;
+    bottom: 0;
+    opacity: 0.5;
+}
+
+.element_container {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 100px;
 }

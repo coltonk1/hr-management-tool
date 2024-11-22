@@ -102,9 +102,15 @@ const Home = () => {
                 <div className={styles.waveMarginTop}>Margin</div>
                 <title>Features</title>
                 <div className={styles.cardContainer}>
-                    <div>Facial Recognition Clocking In and Out</div>
-                    <div>Comprehensive Payroll Management</div>
-                    <div>Employee Self-Service Portal</div>
+                    <div>
+                        <p>Facial Recognition Clocking In and Out</p>
+                    </div>
+                    <div>
+                        <p>Comprehensive Payroll Management</p>
+                    </div>
+                    <div>
+                        <p>Employee Self-Service Portal</p>
+                    </div>
                 </div>
                 <Link to="/more" className="outlined-button">
                     Explore Features
@@ -139,9 +145,15 @@ const Home = () => {
 
                 <title>Solutions</title>
                 <div className={styles.cardContainer}>
-                    <div>Efficient Workforce Management</div>
-                    <div>Cost Control and Budgeting</div>
-                    <div>Enhanced Employee Experience</div>
+                    <div>
+                        <p>Efficient Workforce Management</p>
+                    </div>
+                    <div>
+                        <p>Cost Control and Budgeting</p>
+                    </div>
+                    <div>
+                        <p>Enhanced Employee Experience</p>
+                    </div>
                 </div>
                 <Link to="/more" className="outlined-button">
                     Explore Solutions

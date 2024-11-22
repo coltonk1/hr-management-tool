@@ -13,10 +13,14 @@ function formatNumber(num) {
     }
 }
 
-const Graph = ({ amounts, id, color = "#ff0000", title = "", background = true }) => {
+const Graph = ({ amounts, id, color = "#ff0000", title = "", background = true, overrideMin = false }) => {
     const [currentDay, setCurrentDay] = useState(1728773189350);
 
     useEffect(() => {
+        if (amounts.length === 0) {
+            return;
+        }
+
         const canvas = document.getElementById(id);
         const ctx = canvas.getContext("2d");
         const image = new Image();
@@ -28,10 +32,14 @@ const Graph = ({ amounts, id, color = "#ff0000", title = "", background = true }
         // const amounts = [1000000, 1200000, 900000, 1500000, 1300000, 1750000, 1100000, 1400000, 1600000, 2000000];
 
         let max = 0;
-        let min = amounts[0];
+        let min = amounts[0].value;
         for (let i = 0; i < amounts.length; i++) {
-            max = Math.max(amounts[i], max);
-            min = Math.min(amounts[i], min);
+            max = Math.max(amounts[i].value, max);
+            min = Math.min(amounts[i].value, min);
+        }
+
+        if (overrideMin) {
+            min = 0;
         }
 
         let difference = max - min;
@@ -77,13 +85,13 @@ const Graph = ({ amounts, id, color = "#ff0000", title = "", background = true }
             ctx.fillText(title, canvasWidth / 2, 45);
 
             for (let i = 0; i < amounts.length; i++) {
-                const date = new Date(currentDay - 86400000 * 7 * (amounts.length - (i + 1)));
-                const month = date.getMonth() + 1;
-                const day = date.getDate();
+                // const date = new Date(currentDay - 86400000 * 7 * (amounts.length - (i + 1)));
+                // const month = date.getMonth() + 1;
+                // const day = date.getDate();
 
-                const date2 = new Date(currentDay - 86400000 * 7 * (amounts.length - (i + 0)) + 86400000);
-                const month2 = date2.getMonth() + 1;
-                const day2 = date2.getDate();
+                // const date2 = new Date(currentDay - 86400000 * 7 * (amounts.length - (i + 0)) + 86400000);
+                // const month2 = date2.getMonth() + 1;
+                // const day2 = date2.getDate();
 
                 const xPosition = ((canvasWidth - 125) / (amounts.length - 1)) * i + 75 + 10;
 
@@ -96,7 +104,7 @@ const Graph = ({ amounts, id, color = "#ff0000", title = "", background = true }
                 ctx.font = ".8em Inter, Calibri";
                 ctx.fillStyle = "#eee";
                 ctx.textAlign = "right";
-                ctx.fillText(`${month2}/${day2}-${month}/${day}`, 0, 0);
+                ctx.fillText(`${amounts[i].tag}`, 0, 0);
                 ctx.restore();
             }
         }
@@ -108,11 +116,11 @@ const Graph = ({ amounts, id, color = "#ff0000", title = "", background = true }
         ctx.beginPath();
 
         ctx.moveTo(75, rowSpacing * 5 + 30);
-        ctx.lineTo(75, rowSpacing * 5 - ((amounts[0] - min) * (rowSpacing * 4)) / (max - min) + 30);
+        ctx.lineTo(75, rowSpacing * 5 - ((amounts[0].value - min) * (rowSpacing * 4)) / (max - min) + 30);
         const smoothness = 3;
 
         for (let i = 0; i < amounts.length; i++) {
-            let y = rowSpacing * 5 - ((amounts[i] - min) * (rowSpacing * 4)) / (max - min) + 30;
+            let y = rowSpacing * 5 - ((amounts[i].value - min) * (rowSpacing * 4)) / (max - min) + 30;
             let x = ((canvasWidth - 125) / (amounts.length - 1)) * i + 75;
 
             if (i > 0) {
@@ -139,7 +147,7 @@ const Graph = ({ amounts, id, color = "#ff0000", title = "", background = true }
 
         // Now, redraw the red lines and circles
         for (let i = 0; i < amounts.length; i++) {
-            let y = rowSpacing * 5 - ((amounts[i] - min) * (rowSpacing * 4)) / (max - min) + 30;
+            let y = rowSpacing * 5 - ((amounts[i].value - min) * (rowSpacing * 4)) / (max - min) + 30;
             let x = ((canvasWidth - 125) / (amounts.length - 1)) * i + 75;
 
             // Draw the curved lines (Bezier curves) between circles
@@ -184,7 +192,7 @@ const Graph = ({ amounts, id, color = "#ff0000", title = "", background = true }
             ctx.filter = "grayscale(100%)";
             ctx.drawImage(image, canvas.width - 45, 0, IMAGE_SIZE, (IMAGE_SIZE * image.height) / image.width);
         };
-    }, []);
+    }, [amounts]);
 
     return <canvas id={id} className={stats_style.canvas} style={!background ? { background: "transparent" } : {}}></canvas>;
 };
