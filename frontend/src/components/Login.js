@@ -9,7 +9,7 @@ import earthSrc from "../plainEarth.png";
 const Login = () => {
     const [data, setData] = useState({});
 
-    const handeInputChange = (key, value) => {
+    const handleInputChange = (key, value) => {
         let temp_data = data;
         temp_data[key] = value;
         setData(temp_data);
@@ -29,7 +29,11 @@ const Login = () => {
                     throw new Error("Network response was not ok " + (await response.text()));
                 }
                 let result = await response.text();
-                Cookies.set("token", await result, { expires: 1 / 144 });
+                if (data.checkbox) {
+                    Cookies.set("token", await result, { expires: 30 });
+                } else {
+                    Cookies.set("token", await result, { expires: 1 / 144 });
+                }
                 return await result;
             })
             .then((result) => {
@@ -52,19 +56,24 @@ const Login = () => {
                 <div>
                     <label>Email or Username</label>
                     <input
+                        id="username"
                         placeholder=""
+                        required
                         onChange={(e) => {
-                            handeInputChange("username", e.target.value);
+                            handleInputChange("username", e.target.value);
                         }}
                     ></input>
                 </div>
                 <div>
                     <label>Password</label>
                     <input
+                        id="password"
                         placeholder=""
+                        required
                         onChange={(e) => {
-                            handeInputChange("password", e.target.value);
+                            handleInputChange("password", e.target.value);
                         }}
+                        type="password"
                     ></input>
                     <p className={login_styles.bottomText}>
                         <a>Forgot password?</a>
@@ -74,7 +83,12 @@ const Login = () => {
                     </a>
                 </div>
                 <div className={login_styles.checkBoxContainer}>
-                    <input type="checkbox"></input>
+                    <input
+                        type="checkbox"
+                        onChange={(e) => {
+                            handleInputChange("checkbox", e.target.value);
+                        }}
+                    ></input>
                     <h3>Remember me?</h3>
                 </div>
                 <div>

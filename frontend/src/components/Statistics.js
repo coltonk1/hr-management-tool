@@ -3,102 +3,101 @@ import { Link, useParams } from "react-router-dom";
 import styles from "../styles/Main.module.css";
 import stats_style from "../styles/Stats.module.css";
 
+import Cookies from "js-cookie";
 import Graph from "./components/Graph";
 
 const Stats = () => {
     const { businessid } = useParams();
 
-    const amounts = [];
+    const [hourData, setHourData] = useState([]);
 
-    for (let i = 0; i < 4; i++) {
-        // Generate random values between 3000 and 4000, and multiply by 3
-        const randomValue = Math.floor(Math.random() * 1000) + 30000;
-        amounts.push(randomValue * 3);
+    const getEmployeeHours = async () => {
+        let data = {
+            token: Cookies.get("token"),
+            business_id: businessid,
+        };
+        let result = await fetch("http://localhost:8080/api/getLastFourWeeks", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+        let output = await result.json();
+
+        const renamedData = output.map((item) => ({
+            tag: item.week,
+            value: item.total_hours,
+        }));
+        setHourData(renamedData);
+    };
+
+    useEffect(() => {
+        getEmployeeHours();
+    }, [businessid]);
+
+    let testData = [];
+
+    if (hourData.length === 0) {
+        testData = [
+            {
+                name: "Colt",
+                salary: 0,
+                date_employed: new Date(),
+                worked_hours: 0,
+                balance: 0,
+            },
+        ];
+    } else {
+        testData = [
+            {
+                name: "Colton",
+                salary: 90000,
+                date_employed: 1728793477257,
+                worked_hours: hourData[hourData.length - 1].value,
+                balance: Math.floor(Math.random() * 5000) + 1000,
+            },
+        ];
     }
-
-    const amounts2 = [];
-
-    for (let i = 0; i < 4; i++) {
-        const randomValue = Math.floor(Math.random() * 1000) + 10000;
-        amounts2.push(randomValue * 3);
-    }
-
-    const amounts3 = [];
-
-    for (let i = 0; i < 4; i++) {
-        amounts3.push(amounts[i] - amounts2[i]);
-    }
-
-    const hours = [30, 40, 50, 60];
-
-    const testData = [
-        {
-            name: "Colton Karaffa",
-            salary: Math.floor(Math.random() * 50000) + 50000,
-            date_employed: 1728793477257,
-            worked_hours: Math.floor(Math.random() * 50),
-            balance: Math.floor(Math.random() * 5000) + 1000,
-        },
-        {
-            name: "Colton Karaffa",
-            salary: Math.floor(Math.random() * 50000) + 50000,
-            date_employed: 1728793477257,
-            worked_hours: Math.floor(Math.random() * 50),
-            balance: Math.floor(Math.random() * 5000) + 1000,
-        },
-        {
-            name: "Colton Karaffa",
-            salary: Math.floor(Math.random() * 50000) + 50000,
-            date_employed: 1728793477257,
-            worked_hours: Math.floor(Math.random() * 50),
-            balance: Math.floor(Math.random() * 5000) + 1000,
-        },
-        {
-            name: "Colton Karaffa",
-            salary: Math.floor(Math.random() * 50000) + 50000,
-            date_employed: 1728793477257,
-            worked_hours: Math.floor(Math.random() * 50),
-            balance: Math.floor(Math.random() * 5000) + 1000,
-        },
-    ];
 
     return (
         <main className={styles.wrapper}>
-            <section style={{ width: "fit-content", margin: "0 auto" }}>
-                <title style={{ color: "#303035", textAlign: "left", marginTop: "20px" }}>Some Business, LLC</title>
-                <div className={stats_style.graphContainer}>
-                    <div className={stats_style.canvasContainer}>
+            <section style={{ width: "fit-content", margin: "0 auto" }} className={stats_style.top_section}>
+                {hourData.length > 0 ? (
+                    <div className={stats_style.graphContainer}>
+                        {/* <div className={stats_style.canvasContainer}>
                         <Graph amounts={amounts} id={"canvas1"} title={"Amount Payed"} />
-                    </div>
-                    <div className={styles.smallMargin}>Margin</div>
-                    <div className={stats_style.canvasContainer}>
-                        <Graph amounts={hours} id={"canvas2"} color={"#7033ff"} title={"Hours Worked"} />
-                    </div>
-                    <div className={styles.smallMargin}>Margin</div>
-                    <div className={stats_style.canvasContainer}>
+                    </div> */}
+                        <div className={stats_style.canvasContainer}>
+                            <Graph amounts={hourData} id={"canvas2"} color={"#7033ff"} title={"Hours Worked"} />
+                        </div>
+                        {/* <div className={stats_style.canvasContainer}>
                         <Graph amounts={amounts2} id={"canvas3"} color={"#33ff70"} title={"Amount Cashed Out"} />
-                    </div>
-                    <div className={styles.smallMargin}>Margin</div>
-                    <div className={stats_style.canvasContainer}>
+                    </div> */}
+                        {/* <div className={stats_style.canvasContainer}>
                         <Graph amounts={amounts3} id={"canvas4"} color={"#aaaabb"} title={"Amount Not Cashed Out"} />
-                    </div>
-                    <div>
+                    </div> */}
                         <div>
-                            <p>Amount payed past week</p>
-                            <title>
-                                {new Intl.NumberFormat("en-US", {
-                                    style: "currency",
-                                    currency: "USD",
-                                    maximumFractionDigits: 0,
-                                }).format(amounts[amounts.length - 1])}
-                            </title>
-                        </div>
-                        <div>
-                            <p>Employee hours worked past week</p>
-                            <title>930</title>
+                            <div>
+                                <p>Amount payed past week</p>
+                                <title>
+                                    {hourData.length > 0 &&
+                                        new Intl.NumberFormat("en-US", {
+                                            style: "currency",
+                                            currency: "USD",
+                                            maximumFractionDigits: 0,
+                                        }).format((hourData[hourData.length - 1].value * 90000) / 52 / 40)}
+                                </title>
+                            </div>
+                            <div>
+                                <p>Employee hours worked past week</p>
+                                <title>{hourData.length > 0 && hourData[hourData.length - 1].value}</title>
+                            </div>
                         </div>
                     </div>
-                </div>
+                ) : (
+                    <div>Not enough data to display.</div>
+                )}
             </section>
             <section>
                 <div className={stats_style.mainList}>
@@ -106,8 +105,8 @@ const Stats = () => {
                         <p>Name</p>
                         <p>Salary</p>
                         <p>Date Employed</p>
-                        <p>Payable Worked Hours</p>
-                        <p>Pay So Far</p>
+                        <p>Hours Worked</p>
+                        <p>Pay this Week</p>
                         <p>Balance</p>
                     </div>
                     {testData &&

@@ -8,9 +8,14 @@ import earthSrc from "../plainEarth.png";
 const Login = () => {
     const [data, setData] = useState({ status: "active" });
 
-    const handeInputChange = (key, value) => {
+    const handeInputChange = (key, target) => {
+        // if (!target.validity.valid) {
+        //     document.querySelector(`#${target.id}_error`).textContent = target.validationMessage;
+        // } else {
+        //     document.querySelector(`#${target.id}_error`).textContent = "";
+        // }
         let temp_data = data;
-        temp_data[key] = value;
+        temp_data[key] = target.value;
         setData(temp_data);
     };
 
@@ -50,33 +55,37 @@ const Login = () => {
                     <input
                         id="full_name_input"
                         onChange={(e) => {
-                            handeInputChange("fullName", e.target.value);
+                            handeInputChange("fullName", e.target);
                         }}
                         placeholder=""
                         required
                     ></input>
+                    {/* <span id="full_name_input_error"></span> */}
                 </div>
                 <div>
                     <label className={login_styles.required}>Username</label>
                     <input
                         id="username_input"
                         onChange={(e) => {
-                            handeInputChange("username", e.target.value);
+                            handeInputChange("username", e.target);
                         }}
                         placeholder=""
                         required
                     ></input>
+                    {/* <span id="username_input_error"></span> */}
                 </div>
                 <div>
                     <label className={login_styles.required}>Email</label>
                     <input
                         id="email_input"
                         onChange={(e) => {
-                            handeInputChange("email", e.target.value);
+                            handeInputChange("email", e.target);
                         }}
                         placeholder=""
                         required
+                        type="email"
                     ></input>
+                    {/* <span id="email_input_error"></span> */}
                 </div>
 
                 <div>
@@ -84,17 +93,18 @@ const Login = () => {
                     <input
                         id="password_input"
                         onChange={(e) => {
-                            handeInputChange("password", e.target.value);
+                            handeInputChange("password", e.target);
                         }}
                         placeholder=""
                         required
+                        type="password"
                     ></input>
+                    {/* <span id="password_input_error"></span> */}
                 </div>
                 <div>
-                    <label id="confirm_password_input" className={login_styles.required}>
-                        Confirm Password
-                    </label>
-                    <input placeholder="" required></input>
+                    <label className={login_styles.required}>Confirm Password</label>
+                    <input id="confirm_password_input" placeholder="" required></input>
+                    {/* <span id="confirm_password_input_error"></span> */}
                 </div>
                 <div>
                     <a

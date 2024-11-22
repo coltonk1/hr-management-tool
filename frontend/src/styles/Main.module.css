@@ -101,6 +101,17 @@
     display: flex;
     flex-direction: column;
     row-gap: 20px;
+    background: linear-gradient(to bottom right, #c0a0f0, #5050cf);
+    box-shadow: inset -5px -5px 10px #fff3;
+}
+
+.cardContainer > div > p {
+    color: #f0f0f0;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    margin: auto 0;
+    width: 1px;
 }
 
 .cardContainer > div:nth-child(2) {

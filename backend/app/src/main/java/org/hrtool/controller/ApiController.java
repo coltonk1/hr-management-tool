@@ -7,23 +7,34 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.validation.constraints.NotEmpty;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.hrtool.repository.BusinessRepo;
+import org.hrtool.repository.EmployeesRepo;
 import org.hrtool.repository.ExpenseCardRepository;
 import org.hrtool.repository.ExpenseRepository;
 import org.hrtool.repository.UserRepository;
 import org.hrtool.tables.Users;
+import org.hrtool.models.BusinessRequest;
+import org.hrtool.models.Event;
 import org.hrtool.models.LoginRequest;
 import org.hrtool.models.NewExpenseCardRequest;
 import org.hrtool.models.NewExpenseRequest;
 import org.hrtool.models.SignupRequest;
+import org.hrtool.models.TokenRequest;
+import org.hrtool.tables.Business;
+import org.hrtool.tables.Employee;
 import org.hrtool.tables.ExpenseCards;
 import org.hrtool.tables.Expenses;
+import org.hrtool.tables.HoursHistory;
 import org.apache.catalina.connector.Response;
 import org.hrtool.exceptions.*;
 
@@ -39,6 +50,10 @@ import java.sql.Timestamp;
 @RequestMapping("/api")
 @Validated
 public class ApiController {
+    @Autowired
+    private EmployeesRepo employeesRepo;
+    @Autowired
+    private BusinessRepo businessRepo;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -240,8 +255,7 @@ public class ApiController {
         return Jwts.builder()
                 .setIssuer("me")
                 .setSubject(user.getUsername()) // Set the subject
-                .claim("Some Name", "Some Value")
-                .claim("Some Name 2", "Some Value")
+                .claim("id", user.getId())
                 .setIssuedAt(new Date(System.currentTimeMillis())) // Set issued time
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // Set expiration time
                 .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256) // Sign the token
@@ -275,6 +289,225 @@ public class ApiController {
             // Handle token parsing exceptions (e.g., expired token, invalid signature)
             System.err.println("Failed to read token: " + e.getMessage());
             return null;
+        }
+    }
+
+    @PostMapping("/createBusiness")
+    public ResponseEntity<String> createBusiness(@RequestBody @Valid BusinessRequest businessRequest) {
+        try {
+            if (businessRepo.findByName(businessRequest.getName()).isPresent()) {
+                System.out.println("name already exists");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Business name already exists");
+            }
+
+            Claims token_data = readToken(businessRequest.getToken());
+
+            Long user_id = Long.parseLong(token_data.get("id").toString());
+
+            Business business = Business.builder()
+                    .name(businessRequest.getName())
+                    .owner_id(user_id)
+                    .banner_url(businessRequest.getBanner_url())
+                    .logo_url(businessRequest.getLogo_url())
+                    .recovery_email(businessRequest.getRecovery_email())
+                    .build();
+
+            Business savedBusiness = businessRepo.save(business); // Save business to the database
+
+            Employee user = Employee.builder()
+                    .user_id(user_id)
+                    .position(businessRequest.getPosition())
+                    .name(businessRequest.getUser_name())
+                    .hiring_date(new java.sql.Date(System.currentTimeMillis()))
+                    .business_id(savedBusiness.getBusiness_id())
+                    .description("")
+                    .build();
+
+            employeesRepo.save(user); // Save business to the database
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedBusiness.getBusiness_id().toString());
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
+    }
+
+    @PostMapping("/findUserBusinesses")
+    public ResponseEntity<List<Business>> findUserBusiness(@RequestBody @Valid TokenRequest tokenRequest) {
+        Claims token_data = readToken(tokenRequest.getToken());
+
+        try {
+            List<Long> business_ids = employeesRepo
+                    .findEmployeeBusiness(Long.parseLong(token_data.get("id").toString()));
+
+            List<Business> businesses = businessRepo.findAllById(business_ids);
+
+            return ResponseEntity.status(HttpStatus.OK).body(businesses);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/getEmployeeHoursWorked")
+    public ResponseEntity<List<HoursHistory>> getEmployeeHoursWorked(@RequestBody @Valid TokenRequest tokenRequest) {
+        // Claims token_data = readToken(tokenRequest.getToken());
+
+        try {
+            Object e = employeesRepo
+                    .getLastHalfYearHours(
+                            tokenRequest.getUser_id(),
+                            tokenRequest.getBusiness_id());
+
+            if (e == null) {
+                e = "[]";
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            List<HoursHistory> hoursHistory = mapper.readValue(e.toString(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, HoursHistory.class));
+
+            return ResponseEntity.status(HttpStatus.OK).body(hoursHistory);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/getLastFourWeeks")
+    public ResponseEntity<List<HoursHistory>> getLastFourWeeks(@RequestBody @Valid TokenRequest tokenRequest) {
+        // Claims token_data = readToken(tokenRequest.getToken());
+
+        try {
+            Object e = employeesRepo
+                    .getLastFourWeeksHours(
+                            tokenRequest.getBusiness_id());
+
+            if (e == null) {
+                e = "[]";
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            List<HoursHistory> hoursHistory = mapper.readValue(e.toString(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, HoursHistory.class));
+
+            return ResponseEntity.status(HttpStatus.OK).body(hoursHistory);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/getEmployeeData")
+    public ResponseEntity<Employee> getEmployeeData(@RequestBody @Valid TokenRequest tokenRequest) {
+        Claims token_data = readToken(tokenRequest.getToken());
+
+        try {
+            Employee e = employeesRepo
+                    .findByUserIdAndBusiness(
+                            Long.parseLong(token_data.get("id").toString()),
+                            tokenRequest.getBusiness_id())
+                    .get();
+
+            return ResponseEntity.status(HttpStatus.OK).body(e);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/getEmployeeDataPublic")
+    public ResponseEntity<Employee> getEmployeeDataPublic(@RequestBody @Valid TokenRequest tokenRequest) {
+        // Claims token_data = readToken(tokenRequest.getToken());
+
+        try {
+            Employee e = employeesRepo
+                    .findByIdAndBusiness(
+                            tokenRequest.getUser_id(),
+                            tokenRequest.getBusiness_id())
+                    .get();
+
+            return ResponseEntity.status(HttpStatus.OK).body(e);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/getUserEvents")
+    public ResponseEntity<List<Event>> getUserEvents(@RequestBody @Valid TokenRequest tokenRequest) {
+        Claims token_data = readToken(tokenRequest.getToken());
+
+        try {
+            Object e = employeesRepo
+                    .getUserEvents(
+                            Long.parseLong(token_data.get("id").toString()),
+                            tokenRequest.getBusiness_id());
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            if (e == null) {
+                e = "[]";
+            }
+
+            List<Event> events = mapper.readValue(e.toString(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, Event.class));
+
+            return ResponseEntity.status(HttpStatus.OK).body(events);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/getUserEventsById")
+    public ResponseEntity<List<Event>> getUserEventsById(@RequestBody @Valid TokenRequest tokenRequest) {
+        // Claims token_data = readToken(tokenRequest.getToken());
+
+        try {
+            Object e = employeesRepo
+                    .getUserEventsById(
+                            tokenRequest.getUser_id(),
+                            tokenRequest.getBusiness_id());
+
+            if (e == null) {
+                e = "[]";
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            List<Event> events = mapper.readValue(e.toString(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, Event.class));
+
+            return ResponseEntity.status(HttpStatus.OK).body(events);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/getUserEventsByMonth")
+    public ResponseEntity<List<Event>> getUserEventsByMonth(@RequestBody @Valid TokenRequest tokenRequest) {
+        Claims token_data = readToken(tokenRequest.getToken());
+
+        try {
+            Object e = employeesRepo
+                    .getUserEventsByMonth(
+                            Long.parseLong(token_data.get("id").toString()),
+                            tokenRequest.getBusiness_id(),
+                            tokenRequest.getDate());
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            List<Event> events = mapper.readValue(e.toString(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, Event.class));
+
+            return ResponseEntity.status(HttpStatus.OK).body(events);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

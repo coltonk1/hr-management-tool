@@ -33,6 +33,18 @@
     border-radius: 5px;
 }
 
+/* .loginContainer > div > input:user-invalid {
+    outline: 2px solid red;
+} */
+.loginContainer > div > span {
+    position: absolute;
+    top: 42px;
+    font-size: 0.9em;
+    color: #f00a;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .loginContainer > div {
     display: flex;
     flex-direction: column;

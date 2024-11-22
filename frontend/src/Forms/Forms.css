@@ -142,10 +142,10 @@ form {
 }
 
 #credit_card_graphic {
-    width: 45%;
+    width: 300px;
     height: 180px;
-    background-image: linear-gradient(45deg, #43cea2, #185a9d);
-    border-radius: 15px;
+    background-image: linear-gradient(45deg, #252525, #8251d7);
+    border-radius: 20px;
     box-shadow: 5px 10px 5px rgba(119, 118, 118, 0.235);
     margin-left: 15px;
     display: grid;
@@ -160,6 +160,7 @@ form {
     position: absolute;
     right: -5px;
     bottom: 10px;
+    display: none;
 }
 
 #expense_card_graphic_card_number {
@@ -167,13 +168,13 @@ form {
     left: 20px;
     bottom: 70px;
     font-size: 20px;
-    color: black;
+    color: #eee;
 }
 
 #expense_card_graphic_expiration {
     position: absolute;
     font-size: 13px;
-    color: black;
+    color: #eee;
     bottom: 40px;
     left: 20px;
 }
@@ -185,13 +186,13 @@ form {
 #cardholder {
     position: absolute;
     font-size: 18px;
-    color: black;
+    color: #eee;
     bottom: 17px;
     left: 20px;
 }
 
 #card_company_name {
-    color: black;
+    color: #eee;
     position: absolute;
     left: 20px;
     top: 10px;
