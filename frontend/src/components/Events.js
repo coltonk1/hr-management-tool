@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import styles from "../styles/Main.module.css";
 import event_styles from "../styles/Events.module.css";
 import "../styles/test.css";
+import Cookies from "js-cookie";
 
 const monthNames = [
     "January",
@@ -89,7 +90,15 @@ class Calendar extends React.Component {
         let index = 0;
 
         const isToday = (day) => day === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear();
-        const hasEvent = (day) => this.props.information.some((e) => e.day === day && e.month === month && e.year === year);
+        const hasEvent = (day) => {
+            return this.props.information.some((e) => {
+                return (
+                    parseInt(e.on_date.split("-")[2]) == day &&
+                    parseInt(e.on_date.split("-")[1]) == month + 1 &&
+                    parseInt(e.on_date.split("-")[0]) == year
+                );
+            });
+        };
 
         var b = 0;
         for (let a = 0; a * 7 + b - firstDayOffset + 1 <= lastDayOfMonth; a++) {
@@ -154,8 +163,9 @@ class Calendar extends React.Component {
                 <div id="calendar_container">
                     <div id="calendar-header">
                         <h1 style={{ color: "#303035" }}>
-                            {monthNames[new Date(this.state.year, this.state.month, 1).getMonth()]}{" "}
-                            {this.state.year + Math.floor(this.state.month / 12)}
+                            {monthNames[new Date(this.state.year, this.state.month, 1).getMonth()].slice(0, 3)}
+                            {". '"}
+                            {(this.state.year + Math.floor(this.state.month / 12)).toString().slice(2, 4)}
                         </h1>
                         <input
                             id="left_button"
@@ -176,7 +186,6 @@ class Calendar extends React.Component {
                             }}
                         />
                     </div>
-                    <div className={styles.smallMargin}>Margin</div>
                     {/* <h2>{new Date().toLocaleString("en-US", { weekday: "long", month: "long", day: "2-digit", year: "numeric" })}</h2> */}
                     <div id="day_titles">
                         <h2>S</h2>
@@ -240,7 +249,7 @@ const ExpandedDay = ({ day, month, year, current_month = true, information }) =>
 
     function filterByDate(arr, year, month, date) {
         return arr.filter((item) => {
-            return item.year === year && item.month === month && item.day == date;
+            return item.on_date.split("-")[0] == year && item.on_date.split("-")[1] == month + 1 && item.on_date.split("-")[2] == date;
         });
     }
 
@@ -260,93 +269,160 @@ const ExpandedDay = ({ day, month, year, current_month = true, information }) =>
     );
 };
 
-const ExpandedCalendar = ({ month, year, information }) => {
+const ExpandedCalendar = ({ month, year }) => {
+    const [information, setInformation] = useState([]);
+    const { userid, businessid } = useParams();
+
+    useEffect(() => {
+        fetchInformation(month, year);
+    }, [month, year, businessid, userid]);
+
+    const fetchInformation = async (month, year) => {
+        let data = {
+            token: Cookies.get("token"),
+            user_id: userid,
+            business_id: businessid,
+            date: `${year}-${month}-01`,
+        };
+        let result = await fetch("http://localhost:8080/api/getUserEvents", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+        const output = await result.json();
+        console.log(output);
+        setInformation(output);
+    };
+
     const firstDayOfMonth = new Date(year, month, 1);
     const firstDay = firstDayOfMonth.getDay();
     const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
     const days = [];
+    const scrollRef = useRef(null);
 
     for (let i = -firstDay + 1; i <= 6 * 7 - firstDay; i++)
         days.push(<ExpandedDay year={year} month={month} day={i} current_month={i > 0 && i <= lastDayOfMonth} information={information} />);
 
-    return <div className={event_styles.expanded_month}>{days}</div>;
+    let isDragging = false;
+    let startX, startY, scrollLeft, scrollTop;
+
+    return (
+        <div
+            ref={scrollRef}
+            onMouseDown={(e) => {
+                isDragging = true;
+                startX = e.pageX - scrollRef.current.offsetLeft;
+                startY = e.pageY - scrollRef.current.offsetTop;
+                scrollLeft = scrollRef.current.scrollLeft;
+                scrollTop = scrollRef.current.scrollTop;
+            }}
+            onMouseUp={() => {
+                isDragging = false;
+            }}
+            onMouseLeave={() => {
+                isDragging = false;
+            }}
+            onMouseMove={(e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.pageX - scrollRef.current.offsetLeft;
+                const y = e.pageY - scrollRef.current.offsetTop;
+                const walkX = x - startX;
+                const walkY = y - startY;
+
+                scrollRef.current.scrollLeft = scrollLeft - walkX;
+                scrollRef.current.scrollTop = scrollTop - walkY;
+            }}
+            className={event_styles.expanded_month}
+        >
+            {days}
+        </div>
+    );
 };
 
-const Events = () => {
+const Events = ({ expand }) => {
     const [month, setMonth] = useState(9);
     const [year, setYear] = useState(2024);
     const [information, setInformation] = useState([]);
 
+    const [upcomingData, setUpcomingData] = useState([]);
+
+    const { userid, businessid } = useParams();
+
     useEffect(() => {
         fetchInformation(month, year);
-    }, [month, year]);
+    }, [month, year, businessid, userid]);
 
-    const fetchInformation = async () => {
-        const result = [
-            {
-                day: 13,
-                month: 9,
-                year: 2024,
-                title: "Do something",
-                description: "",
-                color: "red",
-                from: 540,
-                to: 1020,
+    const fetchInformation = async (month, year) => {
+        let data = {
+            token: Cookies.get("token"),
+            user_id: userid,
+            business_id: businessid,
+            date: `${year}-${month}-01`,
+        };
+        let result = await fetch("http://localhost:8080/api/getUserEvents", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
             },
-            {
-                day: 14,
-                month: 9,
-                year: 2024,
-                title: "Talk to Wilber",
-                description: "Talk to that weirdo today",
-                color: "blue",
-                from: 480,
-                to: 600,
-            },
-            {
-                day: 14,
-                month: 9,
-                year: 2024,
-                title: "Talk to Wilber",
-                description: "Talk to that weirdo today",
-                color: "green",
-                from: 480,
-                to: 600,
-            },
-            {
-                day: 30,
-                month: 8,
-                year: 2024,
-                title: "Talk to Myself",
-                description: "Talk to that weirdo today",
-                color: "magenta",
-                from: 480,
-                to: 600,
-            },
-        ];
-        setInformation(result);
+            body: JSON.stringify(data),
+        });
+        const output = await result.json();
+        console.log(output);
+        setInformation(output);
     };
 
+    const getUpcomingEvents = async () => {
+        let data = {
+            token: Cookies.get("token"),
+            business_id: businessid,
+        };
+        let result = await fetch("http://localhost:8080/api/getUserEvents", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+        let output = await result.json();
+        setUpcomingData(output);
+    };
+
+    useEffect(() => {
+        getUpcomingEvents();
+    }, [businessid, userid]);
+
     return (
-        <div>
+        <div className={event_styles.main_container}>
+            <p
+                className={event_styles.expand_arrow}
+                onClick={() => {
+                    expand();
+                }}
+            >
+                {"<"}
+            </p>
             <section>
-                <div className={styles.customSplit}>
-                    <ExpandedCalendar month={month} year={year} information={information} />
-                    <div className={event_styles.calendarSide}>
-                        <div className={styles.smallMargin}>Margin</div>
-                        <Calendar month={month} year={year} information={information} />
-                        <div className={styles.smallMargin}>Margin</div>
-                        <title style={{ color: "#303035" }}>Lapsed</title>
-                        <div className={styles.smallMargin}>Margin</div>
-                        <div className={styles.smallMargin}>Margin</div>
-                        <title style={{ color: "#303035" }}>Upcoming</title>
-                        <div className={styles.smallMargin}>Margin</div>
-                        <div className={styles.smallMargin}>Margin</div>
-                    </div>
+                {/* <ExpandedCalendar month={month} year={year} information={information} /> */}
+                <div className={event_styles.calendarSide}>
+                    <Calendar month={month} year={year} information={information} />
+                    <div className={styles.smallMargin}>Margin</div>
+                    <h1 style={{ color: "#303035" }}>Upcoming</h1>
+                    {upcomingData.map((item) => {
+                        return (
+                            <div className={event_styles.upcoming_event}>
+                                <h1>{item.title}</h1>
+                                <p>{item.on_date}</p>
+                            </div>
+                        );
+                    })}
                 </div>
             </section>
         </div>
     );
 };
 
+export { ExpandedCalendar };
 export default Events;

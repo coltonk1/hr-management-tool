@@ -26,9 +26,6 @@ function App() {
                                 <Link to={"/pricing"}>Pricing</Link>
                             </li>
                             <li>
-                                <Link to={"/contact"}>Contact</Link>
-                            </li>
-                            <li>
                                 <Link to={"/about"}>About</Link>
                             </li>
                         </ul>

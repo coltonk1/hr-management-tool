@@ -52,6 +52,8 @@
     align-items: center;
     padding: 20px 10px;
     box-sizing: border-box;
+    z-index: 2;
+    margin-top: 30px;
 }
 
 .balanceContainer > canvas {
@@ -84,12 +86,15 @@
 
 .historyContainer {
     background: #ededed;
-    padding: 10px 20px 0 20px;
+    padding: 30px 20px 0 20px;
+    z-index: 0;
+    position: relative;
     box-sizing: border-box;
-    border-radius: 25px;
+    border-radius: 0 0 25px 25px;
     width: 90%;
     margin: 0 auto;
-    box-shadow: inset 5px 5px 5px 0 #8885;
+    box-shadow: 0 5px 5px 0 #8885;
+    transform: translateY(-60px);
 }
 
 .mainHistory {
@@ -116,6 +121,10 @@
     columns: 4;
     padding: 10px 20px;
     border-radius: 10px;
+}
+
+.mainHistory.threeC > div {
+    columns: 3;
 }
 
 .mainHistory > div:first-child {
@@ -159,10 +168,11 @@ p {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    z-index: 500;
+    z-index: 100;
     width: 150vmax;
     height: 150vmax;
     pointer-events: all;
+    opacity: 0;
 }
 
 .circleAnimationForwards {
@@ -202,4 +212,15 @@ p {
     padding: 0;
 
     overflow: hidden;
+}
+
+.split {
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 30px;
 }

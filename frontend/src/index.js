@@ -19,6 +19,8 @@ import SettingsPage from "./components/dashboard/SettingsPage";
 import PaymentsPage from "./components/dashboard/PaymentsPage";
 import Events from "./components/Events";
 import Profile from "./components/Profile";
+import InitialView from "./components/InitialView";
+import CreateBusiness from "./components/CreateBusiness";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -32,9 +34,10 @@ const Index = () => {
                     <Route path="login" element={<Login />} />
                     <Route path="signup" element={<Signup />} />
                     <Route path="support" element={<Support />} />
+                    <Route path="dashboard" element={<InitialView />} />
                     <Route element={<Dashboard />}>
-                        <Route path="dashboard" element={<SummaryPage />} />
-                        <Route path="dashboard">
+                        <Route path="dashboard/:businessid" element={<SummaryPage />} />
+                        <Route path="dashboard/:businessid">
                             <Route path="attendance" element={<AttendancePage />} />
                             <Route path="payments" element={<PaymentsPage />} />
                             <Route path="settings" element={<SettingsPage />} />
@@ -44,6 +47,7 @@ const Index = () => {
                     <Route path="/:businessid/bank" element={<Bank />} />
                     <Route path="/:businessid/events" element={<Events />} />
                     <Route path="/:businessid/profile/:userid" element={<Profile />} />
+                    <Route path="/createBusiness" element={<CreateBusiness />} />
 
                     <Route path="*" element={<NotFound />} />
                 </Route>

@@ -16,8 +16,9 @@ const Login = () => {
     };
 
     const login_request = () => {
+        data.token = Cookies.get("token");
         console.log("data: ", data);
-        fetch("http://localhost:8080/api/login", {
+        fetch("http://localhost:8080/api/createBusiness", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -28,17 +29,12 @@ const Login = () => {
                 if (!response.ok) {
                     throw new Error("Network response was not ok " + (await response.text()));
                 }
-                let result = await response.text();
-                if (data.checkbox) {
-                    Cookies.set("token", await result, { expires: 30 });
-                } else {
-                    Cookies.set("token", await result, { expires: 1 / 144 });
-                }
+                let result = await response.json();
                 return await result;
             })
             .then((result) => {
                 console.log("Success:", result);
-                window.location.href = "/dashboard";
+                window.location.href = "/dashboard/" + result;
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -50,46 +46,67 @@ const Login = () => {
             <div className={styles.smallMargin}>Margin</div>
             <div className={login_styles.loginContainer}>
                 <div className={login_styles.titleContainer}>
-                    <h1>Welcome Back</h1>
-                    <p>Sign in to your Polaris account</p>
+                    <h1>Create Business</h1>
                 </div>
                 <div>
-                    <label>Email or Username</label>
+                    <label>Business Name</label>
                     <input
-                        id="username"
-                        placeholder=""
                         required
+                        placeholder=""
                         onChange={(e) => {
-                            handleInputChange("username", e.target.value);
+                            handleInputChange("name", e.target.value);
                         }}
                     ></input>
                 </div>
                 <div>
-                    <label>Password</label>
+                    <label>Your Name</label>
                     <input
-                        id="password"
-                        placeholder=""
                         required
+                        placeholder=""
                         onChange={(e) => {
-                            handleInputChange("password", e.target.value);
+                            handleInputChange("user_name", e.target.value);
                         }}
-                        type="password"
                     ></input>
-                    <p className={login_styles.bottomText}>
-                        <a>Forgot password?</a>
-                    </p>
-                    <a className={login_styles.icon}>
-                        <img src="https://icons.veryicon.com/png/o/miscellaneous/computer-room-integration/hide-password.png"></img>
-                    </a>
                 </div>
-                <div className={login_styles.checkBoxContainer}>
+                <div>
+                    <label>Your Position</label>
                     <input
-                        type="checkbox"
+                        required
+                        placeholder=""
                         onChange={(e) => {
-                            handleInputChange("checkbox", e.target.value);
+                            handleInputChange("position", e.target.value);
                         }}
                     ></input>
-                    <h3>Remember me?</h3>
+                </div>
+                <div>
+                    <label>Recovery Email</label>
+                    <input
+                        required
+                        placeholder=""
+                        onChange={(e) => {
+                            handleInputChange("recovery_email", e.target.value);
+                        }}
+                    ></input>
+                </div>
+                <div>
+                    <label>Banner URL</label>
+                    <input
+                        required
+                        placeholder=""
+                        onChange={(e) => {
+                            handleInputChange("banner_url", e.target.value);
+                        }}
+                    ></input>
+                </div>
+                <div>
+                    <label>Logo URL</label>
+                    <input
+                        required
+                        placeholder=""
+                        onChange={(e) => {
+                            handleInputChange("logo_url", e.target.value);
+                        }}
+                    ></input>
                 </div>
                 <div>
                     <a
@@ -103,24 +120,14 @@ const Login = () => {
                         }}
                         className={login_styles.submitLogin}
                     >
-                        Sign In
+                        Create Business
                     </a>
                 </div>
                 <div>
-                    <p>
-                        Don't have an account yet? <Link to={"/signup"}>Sign up</Link>
-                    </p>
-                </div>
-                <div>
-                    <small>
-                        By signing in, you agree to our <a>Terms of Service</a> and <a>Privacy Policy</a>
-                    </small>
+                    <small>Everything can be modified later.</small>
                 </div>
             </div>
             <div className={styles.smallMargin}>Margin</div>
-            <div className={login_styles.earthContainer}>
-                <img className={login_styles.earth} src={earthSrc}></img>
-            </div>
         </section>
     );
 };
