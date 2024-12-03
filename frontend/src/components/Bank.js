@@ -4,6 +4,7 @@ import styles from "../styles/Main.module.css";
 import bank_styles from "../styles/Bank.module.css";
 
 import star_src from "../shooting_stars.png";
+import ExpenseCardGraphic from "../Forms/ExpenseCardGraphic";
 
 const BalanceGraph = ({ amounts, color }) => {
     useEffect(() => {
@@ -266,6 +267,37 @@ const Bank = () => {
                 <div className={styles.smallMargin}>Margin</div>
                 <div className={styles.smallMargin}>Margin</div>
             </section>
+            <section>
+                <div className={bank_styles.split}>
+                    <ExpenseCardGraphic cardNumber={"1234123412341234"} expirationDate={"08/24"} cardholder={"Bob"} />
+                    <div>
+                        <h1>Credits</h1>
+                        <h2>$3,000</h2>
+                    </div>
+                </div>
+                <div className={`${bank_styles.mainHistory} ${bank_styles.threeC}`}>
+                    <div>
+                        <p>Date</p>
+                        {/* <p>Previous Credits</p> */}
+                        <p>Amount Changed</p>
+                        <p>Credits Remaining</p>
+                    </div>
+                    {history &&
+                        history.map((data, index) => {
+                            return (
+                                <div key={index}>
+                                    <p>{new Intl.DateTimeFormat("en-US").format(new Date(data.date))}</p>
+                                    {/* <p>{data.available.toLocaleString("en-US", { style: "currency", currency: "USD" })}</p> */}
+                                    <p style={{ color: data.amount_changed < 0 ? "red" : "green" }}>
+                                        {data.amount_changed.toLocaleString("en-US", { style: "currency", currency: "USD" })}
+                                    </p>
+                                    <p>{data.new_balance.toLocaleString("en-US", { style: "currency", currency: "USD" })}</p>
+                                </div>
+                            );
+                        })}
+                </div>
+            </section>
+            <div className={styles.smallMargin}>Margin</div>
         </div>
     );
 };

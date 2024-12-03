@@ -15,7 +15,7 @@ input[type="button"] {
     border: none;
     cursor: pointer;
     background: #0001;
-    font-size: 20px;
+    font-size: 15px;
     color: grey;
     border-radius: 50px;
     box-shadow: 5px 5px 10px -5px #80808030, inset -5px -5px 10px -5px #80808080;
@@ -43,10 +43,13 @@ input[type="button"]:active {
 }
 
 #calendar_container {
-    display: block;
+    display: flex;
     width: fit-content;
     position: relative;
     height: fit-content;
+    flex-direction: column;
+    align-items: center;
+    width: fit-content;
 }
 
 .row {
@@ -57,10 +60,10 @@ input[type="button"]:active {
 .day,
 .emptyday {
     display: block;
-    width: 45px;
-    height: 45px;
-    line-height: 45px;
-    font-size: 25px;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    font-size: 20px;
     text-align: center;
     backdrop-filter: blur(15px);
     /* background: #fff8; */
@@ -102,11 +105,12 @@ input[type="button"]:active {
     gap: 5px;
     padding: 5px;
     box-sizing: border-box;
+    margin-top: 20px;
 }
 
 #day_titles h2 {
     display: block;
-    width: 45px;
+    width: 35px;
     height: fit-content;
     text-align: center;
     font-size: 1.2em;
@@ -127,8 +131,8 @@ input[type="button"]:active {
 
 #circle {
     position: absolute;
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     background: radial-gradient(#20202030 0%, #ffffff00 50%);
     pointer-events: none;
     border-radius: 50%;
@@ -145,4 +149,10 @@ input[type="button"]:active {
 #calendar-header {
     display: flex;
     gap: 20px;
+    width: fit-content;
+}
+
+#calendar-header > h1 {
+    width: fit-content;
+    width: 100px;
 }
