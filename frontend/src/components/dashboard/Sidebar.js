@@ -5,7 +5,13 @@ import settings_icon from "../../resources/settings_icon.svg";
 import attendance_icon from "../../resources/attendance_icon.svg";
 import payments_icon from "../../resources/payments_icon.svg";
 import summary_icon from "../../resources/summary_icon.svg";
+import people_icon from "../../resources/people_icon.svg";
 import Cookies from "js-cookie";
+import arrow_up from "../../resources/arrow_up.svg";
+import arrow_down from "../../resources/arrow_down.svg";
+import arrow_left from "../../resources/arrow_left.svg";
+import arrow_right from "../../resources/arrow_right.svg";
+import logout from "../../resources/logout.svg";
 
 const Sidebar = () => {
     // const getBusinesses = () => {
@@ -68,7 +74,7 @@ const Sidebar = () => {
                     }
                 }}
             >
-                {">"}
+                {expanded ? <img className={styles.arrow} src={arrow_left}></img> : <img className={styles.arrow} src={arrow_right}></img>}
             </p>
             {data &&
                 data.map((item, index) => {
@@ -78,6 +84,9 @@ const Sidebar = () => {
             <Link to="/createBusiness" className={styles.create}>
                 Create a company
             </Link>
+            <div className={styles.logout}>
+                <img src={logout}></img>Log out
+            </div>
         </div>
     );
 };
@@ -118,7 +127,7 @@ const Nav = ({ id }) => {
                     }
                 }}
             >
-                {expanded ? "^" : "v"}
+                {expanded ? <img className={styles.arrow} src={arrow_up}></img> : <img className={styles.arrow} src={arrow_down}></img>}
             </p>
             <li className={styles.li}>
                 <img className={styles.icon} src={summary_icon}></img>
@@ -133,9 +142,22 @@ const Nav = ({ id }) => {
                 </Link>
             </li>
             <li className={styles.li}>
-                <img className={styles.icon} src={payments_icon}></img>
+                <img className={styles.icon} src={people_icon}></img>
                 <Link className={styles.li} to={`/dashboard/${id}/people`}>
                     People
+                </Link>
+            </li>
+
+            <li className={styles.li}>
+                <img className={styles.icon} src={payments_icon}></img>
+                <Link className={styles.li} to={`/dashboard/${id}/payments`}>
+                    Payments
+                </Link>
+            </li>
+            <li className={styles.li}>
+                <img className={styles.icon} src={settings_icon}></img>
+                <Link className={styles.li} to={`/dashboard/${id}/settings`}>
+                    Settings
                 </Link>
             </li>
         </nav>
