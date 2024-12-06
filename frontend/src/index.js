@@ -21,6 +21,7 @@ import Events from "./components/Events";
 import Profile from "./components/Profile";
 import InitialView from "./components/InitialView";
 import CreateBusiness from "./components/CreateBusiness";
+import People from "./components/People";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -40,6 +41,7 @@ const Index = () => {
                         <Route path="dashboard/:businessid">
                             <Route path="attendance" element={<AttendancePage />} />
                             <Route path="payments" element={<PaymentsPage />} />
+                            <Route path="people" element={<People />} />
                             <Route path="settings" element={<SettingsPage />} />
                         </Route>
                     </Route>
