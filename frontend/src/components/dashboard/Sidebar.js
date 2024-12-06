@@ -74,7 +74,15 @@ const Sidebar = () => {
                     }
                 }}
             >
-                {expanded ? <img className={styles.arrow} src={arrow_left}></img> : <img className={styles.arrow} src={arrow_right}></img>}
+                {expanded ? (
+                    <div className={styles.arrow_container}>
+                        <img className={styles.arrow} src={arrow_left}></img>
+                    </div>
+                ) : (
+                    <div className={styles.arrow_container}>
+                        <img className={styles.arrow} src={arrow_right}></img>
+                    </div>
+                )}
             </p>
             {data &&
                 data.map((item, index) => {
