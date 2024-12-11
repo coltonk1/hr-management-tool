@@ -423,11 +423,15 @@
 }
 
 .logout {
-    background-color: rgba(255, 0, 0, 0.374);
+    background-color: rgba(173, 38, 38, 0.374);
     margin-top: auto;
     padding: 0 10px 0 10px;
     border-radius: 5px;
     align-self: flex-start;
-    position: fixed;
     bottom: 10px;
+    vertical-align: middle;
+}
+
+.icon {
+    vertical-align: middle;
 }
