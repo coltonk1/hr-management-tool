@@ -92,9 +92,9 @@ const Sidebar = () => {
             <Link to="/createBusiness" className={styles.create}>
                 Create a company
             </Link>
-            <div className={styles.logout}>
+            <Link to="/home" className={styles.logout}>
                 <img src={logout}></img>Log out
-            </div>
+            </Link>
         </div>
     );
 };
